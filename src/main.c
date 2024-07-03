@@ -13,9 +13,9 @@ void damper_motor_off()
 void setup() {
   // put your setup code here, to run once:
   fan_setup();
-  pinMode(pin_Endschalter, INPUT_PULLUP);
+  pinMode(pin_Endschalter, INPUT_PULLUP); //Verschieben zu dampers.c!
 
-  attachInterrupt(digitalPinToInterrupt(pin_Endschalter), damper_motor_off, FALLING);
+  attachInterrupt(digitalPinToInterrupt(pin_Endschalter), damper_motor_off, FALLING); //in dampers_setup verschieben!
 }
 
 void loop() {
