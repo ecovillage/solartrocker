@@ -10,14 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FAN_H
-#define FAN_H
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
-void fan_setup();
-
-void fan_on();
-void fan_off();
-int fan_state();
-void print_state_fan();
+void display_values();
 
 #endif

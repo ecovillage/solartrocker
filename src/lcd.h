@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   luefter.c                                          :+:      :+:    :+:   */
+/*   fan.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jweingar <jweingar@student.42wolf>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,31 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Arduino.h"
-#include "fan.h"
+#ifndef LCD_H
+#define LCD_H
 
-int FanPin = 13; // Beispiel für Pin 13, ändere dies entsprechend deinem Setup
-int state_fan;
+void lcd_setup();
 
-void fan_setup()
-{
-    pinMode(FanPin, OUTPUT); // Den Pin als Ausgang konfigurieren
-	fan_off();
-}
+void clear_lcd();
+void print_str_lcd(char *str);
+void print_char_lcd(char c);
+void print_float_lcd(float nbr);
+void set_position_cursor_lcd(int row, int column);
+void display_on_lcd();
 
-void fan_on()
-{
-    digitalWrite(FanPin, HIGH);
-	state_fan = 1;
-}
-
-void fan_off()
-{
-	digitalWrite(FanPin, LOW);
-	state_fan = 0;
-}
-
-int fan_state()
-{
-	return (state_fan);
-}
+#endif

@@ -8,6 +8,7 @@
 - Protokollierung in protocol.txt mit Zeit und allen Werten
 - ständige Ausgabe der Werte, Einstellungen und Zustände auf Display
 - Menü zum Setzen/Ändern der Einstellungen.
+		-attachInterrupt(digitalPinToInterrupt(pin_Endschalter), damper_motor_off, FALLING); //in dampers_setup verschieben!
 
 
 platform.io project ATmel4809

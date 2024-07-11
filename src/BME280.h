@@ -7,5 +7,6 @@ float read_bme_temperature();
 float read_bme_humidity();
 float read_bme_pressure();
 float read_bme_altitude();
+void print_values_BME280();
 
 #endif
