@@ -44,7 +44,7 @@ void print_state_damper()
 {
     //clear_lcd();
 	//set_position_cursor_lcd(0,0);
-    print_str_lcd("state damper: ");
+    print_str_lcd("damper: ");
 	if (damper_state())
 		print_str_lcd("open");
 	else

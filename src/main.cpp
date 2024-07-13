@@ -4,6 +4,7 @@
 #include "lcd.h"
 #include "bme280.h"
 #include "display.h"
+#include "ds18B20.h"
 
 void setup()
 {	
@@ -16,12 +17,10 @@ void setup()
 
 void loop()
 {
-	fan_on();
-	open_damper();
-	display_values();
-	delay(1000);
-	fan_off();
-	close_damper();
+	if (read_temp(0) > 30)
+		open_damper();
+	else
+		close_damper();
 	display_values();
 	delay(1000);
 }
