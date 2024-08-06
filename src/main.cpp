@@ -5,6 +5,7 @@
 #include "bme280.h"
 #include "display.h"
 #include "ds18B20.h"
+#include "buttons.h"
 
 void setup()
 {	
@@ -17,11 +18,23 @@ void setup()
 
 void loop()
 {
-	if (read_temp(0) > 30)
-		open_damper();
-	else
-		close_damper();
+	if (state_button1() == 0)
+	{
+		if (damper_state() == 0)
+			open_damper();
+		else
+			close_damper();
+		delay(1000);
+	}
+	if (state_button2() == 0)
+	{
+		if (fan_state() == 0)
+			fan_on();
+		else
+			fan_off();
+		delay(1000);
+	}
 	display_values();
-	delay(1000);
+	delay(100);
 }
 

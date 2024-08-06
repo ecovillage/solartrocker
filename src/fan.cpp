@@ -44,10 +44,10 @@ void print_state_fan()
 {
     //clear_lcd();
 	//set_position_cursor_lcd(0,0);
-    print_str_lcd("fan:    ");
+    print_str_lcd("Ventilator: ");
 	if (fan_state())
-		print_str_lcd("on");
+		print_str_lcd("an");
 	else
-		print_str_lcd("off");
+		print_str_lcd("aus");
 	print_str_lcd("\n");	
 }

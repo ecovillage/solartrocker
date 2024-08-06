@@ -39,7 +39,7 @@ float read_temp(int index)
 
 void print_values_DS18B20()
 {
-    print_str_lcd("T(DS):  ");
+    print_str_lcd("T(DS):      ");
     print_float_lcd(read_temp(0));
     print_str_lcd(" ");
 	print_char_lcd((char)247);                        // degree symbol

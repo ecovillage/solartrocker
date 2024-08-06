@@ -44,10 +44,10 @@ void print_state_damper()
 {
     //clear_lcd();
 	//set_position_cursor_lcd(0,0);
-    print_str_lcd("damper: ");
+    print_str_lcd("Klappen:    ");
 	if (damper_state())
-		print_str_lcd("open");
+		print_str_lcd("auf");
 	else
-		print_str_lcd("closed");
+		print_str_lcd("zu");
 	print_str_lcd("\n");	
 }
