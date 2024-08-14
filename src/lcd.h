@@ -19,6 +19,7 @@ void clear_lcd();
 void print_str_lcd(char *str);
 void print_char_lcd(char c);
 void print_float_lcd(float nbr);
+void print_int_lcd(int nbr);
 void set_position_cursor_lcd(int row, int column);
 void display_on_lcd();
 

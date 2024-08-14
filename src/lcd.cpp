@@ -58,6 +58,11 @@ void print_float_lcd(float nbr)
 	display.print(nbr);
 }
 
+void print_int_lcd(int nbr)
+{
+	display.print(nbr);
+}
+
 void display_on_lcd()
 {
 	display.display();

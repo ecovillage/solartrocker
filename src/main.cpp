@@ -18,7 +18,7 @@ void setup()
 
 void loop()
 {
-	if (state_button1() == 0)
+	if (state_button1() == LOW)
 	{
 		if (damper_state() == 0)
 			open_damper();
@@ -26,7 +26,7 @@ void loop()
 			close_damper();
 		delay(1000);
 	}
-	if (state_button2() == 0)
+	if (state_button2() == LOW)
 	{
 		if (fan_state() == 0)
 			fan_on();
