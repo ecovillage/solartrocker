@@ -14,9 +14,9 @@
 #include "buttons.h"
 #include "lcd.h"
 
-int pin_button1 = 3;
+int pin_button1 = 5;
 int pin_button2 = 4;
-int pin_button3 = 5;
+int pin_button3 = 3;
 
 void buttons_setup()
 {
@@ -27,28 +27,35 @@ void buttons_setup()
 
 int state_button1()
 {
-	return(digitalRead(pin_button1));
+	if (digitalRead(pin_button1) == LOW)
+		return (1);
+	else
+		return (0);
 }
 
 int state_button2()
 {
-	return(digitalRead(pin_button2));
+	if (digitalRead(pin_button2) == LOW)
+		return (1);
+	else
+		return (0);
 }
 
 int state_button3()
 {
-	return(digitalRead(pin_button3));
+	if (digitalRead(pin_button3) == LOW)
+		return (1);
+	else
+		return (0);
 }
 
 void print_values_buttons()
 {
-	print_str_lcd("Taster 1:   ");
+	print_str_lcd("Taster1,2,3:");
   	print_int_lcd(state_button1());
-	print_str_lcd("\n");
-	print_str_lcd("Taster 2:   ");
+	print_str_lcd(",");
   	print_int_lcd(state_button2());
-	print_str_lcd("\n");
-	print_str_lcd("Taster 3:   ");
+	print_str_lcd(",");
   	print_int_lcd(state_button3());
 	print_str_lcd("\n");
 }

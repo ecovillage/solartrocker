@@ -6,6 +6,7 @@
 #include "bme280.h"
 #include "ds18B20.h"
 #include "buttons.h"
+#include "storage.h"
 
 
 void display_values()
@@ -17,5 +18,6 @@ void display_values()
 	print_values_BME280();
 	print_values_DS18B20();
 	print_values_buttons();
+	print_storage();
 	display_on_lcd();
 }
