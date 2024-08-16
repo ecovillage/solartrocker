@@ -1,14 +1,15 @@
 #include "Arduino.h"
 #include "damper_logic.h"
 
-size_t HUMIDITY    = 0;
-size_t TEMPERATURE = 1;
+const size_t HUMIDITY    = 0;
+const size_t TEMPERATURE = 1;
 
-/** Check whether we are on the "right" side of the curve. */
+/** Check whether we are on the "right" side of the curve.      */
 boolean air_too_moist(float air_humidity_inside, float air_temperature_inside) {
   // moisture vs temperature, stay below to keep heating
-  size_t TABLE_SIZE = 3;
+  const size_t TABLE_SIZE = 6;
 
+  // Must be sorted by first values!
   float max_values_moisture_temperature[TABLE_SIZE][2] = {
     {10.0, 80.0},
     {20.0, 50.0},
@@ -30,6 +31,7 @@ boolean air_too_moist(float air_humidity_inside, float air_temperature_inside) {
     if (air_humidity_inside > max_values_moisture_temperature[i][HUMIDITY]) {
       return (air_temperature_inside > max_values_moisture_temperature[i][TEMPERATURE]);
     }
+    // check next value
   }
 
   return false;
