@@ -16,12 +16,11 @@ void setup()
 	damper_setup();
 	lcd_setup();
 	buttons_setup();
-	
 }
 
 void loop()
 {
-	if (state_button1() == 1)
+	if (button1_pressed())
 	{
 		if (damper_state() == 0)
 			open_damper();
@@ -29,7 +28,7 @@ void loop()
 			close_damper();
 		delay(200);
 	}
-	if (state_button2() == 1)
+	if (button2_pressed() == 1)
 	{
 		if (fan_state() == 0)
 			fan_on();
@@ -37,7 +36,7 @@ void loop()
 			fan_off();
 		delay(200);
 	}
-	if (state_button3() == 1)
+	if (button3_pressed() == 1)
 	{
 		set_modus(read_modus() + 1);
 		delay(200);

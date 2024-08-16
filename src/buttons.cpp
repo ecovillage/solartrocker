@@ -25,37 +25,28 @@ void buttons_setup()
 	pinMode(pin_button3, INPUT_PULLUP);
 }
 
-int state_button1()
+boolean button1_pressed()
 {
-	if (digitalRead(pin_button1) == LOW)
-		return (1);
-	else
-		return (0);
+	return (digitalRead(pin_button1) == LOW);
 }
 
-int state_button2()
+boolean button2_pressed()
 {
-	if (digitalRead(pin_button2) == LOW)
-		return (1);
-	else
-		return (0);
+	return (digitalRead(pin_button2) == LOW);
 }
 
-int state_button3()
+boolean button3_pressed()
 {
-	if (digitalRead(pin_button3) == LOW)
-		return (1);
-	else
-		return (0);
+	return (digitalRead(pin_button3) == LOW);
 }
 
 void print_values_buttons()
 {
 	print_str_lcd("Taster1,2,3:");
-  	print_int_lcd(state_button1());
+  	print_int_lcd(button1_pressed());
 	print_str_lcd(",");
-  	print_int_lcd(state_button2());
+  	print_int_lcd(button2_pressed());
 	print_str_lcd(",");
-  	print_int_lcd(state_button3());
+  	print_int_lcd(button3_pressed());
 	print_str_lcd("\n");
 }
