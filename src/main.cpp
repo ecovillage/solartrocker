@@ -8,6 +8,7 @@
 #include "buttons.h"
 #include "storage.h"
 #include "data.h"
+#include "damper_logic.h"
 
 void setup()
 {	
@@ -42,6 +43,8 @@ void loop()
 		set_modus(read_modus() + 1);
 		delay(200);
 	}
+	if (!check_humidity())
+		check_fan_neccessary();
 	display_values();
 	collect_data();
 	delay(100);
