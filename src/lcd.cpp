@@ -55,7 +55,7 @@ void print_char_lcd(char c)
 
 void print_float_lcd(float nbr)
 {
-	display.print(nbr);
+	display.print(nbr, 1);
 }
 
 void print_int_lcd(int nbr)
