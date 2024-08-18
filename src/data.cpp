@@ -11,18 +11,55 @@
 /* ************************************************************************** */
 
 #include "Arduino.h"
+#include "bme280.h"
+#include "ds18B20.h"
 
-int max_values = 100;
-int fifo_Bufffer[max_values];
+const int max_values = 100;
+float ring_buffer[max_values][3];
+int act_nb;
 unsigned long  timestamp_last_save;
-int interval = 60 * 5 * 1000;
+const int interval = 5 * 60 * 1000; // = 5 Min
+boolean	first_round = 1;
 
-void data_init()
+
+void data_setup()
 {
     timestamp_last_save = millis();
+	act_nb = 0;
 }
 
-void save_data()
+float avarage_temp_bme()
 {
-    if (timestamp_last_save - millis() < )
+	float	sum;
+	int		i;
+	int		max;
+
+	sum = 0;
+	i = 0;
+	max = act_nb;
+	while (i <= max)
+	{
+		if (!first_round)
+			max = max_values - 1;
+		sum += ring_buffer[i][0];
+		i++;
+	}
+	return (sum/(max + 1));
+}
+
+void collect_data()
+{
+    if (timestamp_last_save - millis() > interval)
+	{
+		if (act_nb == max_values)
+		{
+			act_nb = 0;
+			first_round = 0;
+		}
+		ring_buffer[act_nb][0] = read_bme_temperature();
+		ring_buffer[act_nb][1] = read_bme_humidity();
+		ring_buffer[act_nb][2] = read_temp(0);
+		act_nb++;
+		timestamp_last_save = millis();
+	}
 }
