@@ -18,13 +18,13 @@ const int max_values = 100;
 float ring_buffer[max_values][3];
 int act_nb;
 unsigned long  timestamp_last_save;
-const int interval = 5 * 60 * 1000; // = 5 Min
+const int interval = 300; // 300 = 5 Min
 boolean	first_round = 1;
 
 
 void data_setup()
 {
-    timestamp_last_save = millis();
+    timestamp_last_save = millis() / 1000;
 	act_nb = 0;
 }
 
@@ -66,6 +66,35 @@ float avarage_humidity_bme()
 	return (sum/(max + 1));
 }
 
+float delta_min_max_humidity_bme()
+{
+	float	min_h;
+	float	max_h;
+	int		i;
+	int		max;
+
+	i = 0;
+	min_h = 0;
+	max_h = 0;
+	max = act_nb;
+	if (first_round)
+	{
+		Serial.println("delta H in erster Runde = 100");
+		return (100);
+	}
+	while (i <= max)
+	{
+		if (!first_round)
+			max = max_values - 1;
+		if (ring_buffer[i][1] > max_h)
+			max_h = ring_buffer[i][1];
+		else if (ring_buffer[i][1] < min_h)
+			min_h = ring_buffer[i][1];
+		i++;
+	}
+	return (max_h - min_h);
+}
+
 void collect_data()
 {
     if (millis() - timestamp_last_save > interval)
@@ -79,6 +108,6 @@ void collect_data()
 		ring_buffer[act_nb][1] = read_bme_humidity();
 		ring_buffer[act_nb][2] = read_temp(0);
 		act_nb++;
-		timestamp_last_save = millis();
+		timestamp_last_save = millis() / 1000;
 	}
 }
