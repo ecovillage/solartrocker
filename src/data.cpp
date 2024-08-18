@@ -47,9 +47,28 @@ float avarage_temp_bme()
 	return (sum/(max + 1));
 }
 
+float avarage_humidity_bme()
+{
+	float	sum;
+	int		i;
+	int		max;
+
+	sum = 0;
+	i = 0;
+	max = act_nb;
+	while (i <= max)
+	{
+		if (!first_round)
+			max = max_values - 1;
+		sum += ring_buffer[i][1];
+		i++;
+	}
+	return (sum/(max + 1));
+}
+
 void collect_data()
 {
-    if (timestamp_last_save - millis() > interval)
+    if (millis() - timestamp_last_save > interval)
 	{
 		if (act_nb == max_values)
 		{

@@ -16,5 +16,6 @@
 void data_setup();
 void collect_data();
 float avarage_temp_bme();
+float avarage_humidity_bme();
 
 #endif
