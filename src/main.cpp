@@ -7,6 +7,7 @@
 #include "ds18B20.h"
 #include "buttons.h"
 #include "storage.h"
+#include "data.h"
 
 void setup()
 {	
@@ -42,6 +43,7 @@ void loop()
 		delay(200);
 	}
 	display_values();
+	collect_data();
 	delay(100);
 }
 
