@@ -61,7 +61,11 @@ boolean check_humidity()
 
 void check_fan_neccessary()
 {
-	
+	float	delta;
+
+	delta = delta_min_max_humidity_bme();
+	Serial.print("delta max min humidity: ");
+	Serial.println(delta);
 	if (delta_min_max_humidity_bme() < min_percent_change_hydr)
 	{	
 		Serial.println("Luftfeuchte zu konstant, schalte Fan aus");
