@@ -20,7 +20,7 @@ int state_fan;
 void fan_setup()
 {
     pinMode(FanPin, OUTPUT); // Den Pin als Ausgang konfigurieren
-	fan_off();
+	fan_on();
 }
 
 void fan_on()
