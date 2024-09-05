@@ -14,9 +14,9 @@
 #include "buttons.h"
 #include "lcd.h"
 
-int pin_button1 = 5;
+int pin_button1 = 3;
 int pin_button2 = 4;
-int pin_button3 = 3;
+int pin_button3 = 5;
 
 void buttons_setup()
 {
