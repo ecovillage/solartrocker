@@ -24,21 +24,20 @@ void loop()
 {
 	if (button1_pressed())
 	{
-		if (damper_state() == 0)
-			open_damper();
-		else
-			close_damper();
+		open_damper();
 		delay(200);
+		return ;
 	}
-	if (button2_pressed() == 1)
+	if (button2_pressed() )
 	{
 		if (fan_state() == 0)
 			fan_on();
 		else
 			fan_off();
 		delay(200);
+		return ;
 	}
-	if (button3_pressed() == 1)
+	if (button3_pressed())
 	{
 		set_modus(read_modus() + 1);
 		reset_max_temp();
