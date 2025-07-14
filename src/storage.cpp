@@ -120,5 +120,7 @@ void print_storage()
 {
 	print_str_lcd("max Temp >  ");
 	print_int_lcd(calc_max_temp());
-	print_str_lcd("\n");
+	print_str_lcd(" ");
+	print_char_lcd((char)247);                        // degree symbol
+    print_str_lcd("C\n");
 }

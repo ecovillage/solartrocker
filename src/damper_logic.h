@@ -4,5 +4,6 @@
 boolean air_too_moist(float air_humidity_inside, float air_temperature_inside);
 boolean check_humidity();
 void check_fan_neccessary();
+void print_time_lueften();
 
 #endif

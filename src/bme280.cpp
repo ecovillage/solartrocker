@@ -21,7 +21,7 @@ Adafruit_BME280 bme; // I2C
 
 void BME280_setup()
 {
-	Serial.println(F("BMP280 test"));
+	Serial.println(F("BME280 test"));
 	if (!bme.begin(0x76))
 		Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
 	else
@@ -50,13 +50,13 @@ float read_bme_altitude()
 
 void print_values_BME280()
 {
-    print_str_lcd("T(BMP):     "); 
+    print_str_lcd("T(BME):     "); 
     print_float_lcd(read_bme_temperature());
     print_str_lcd(" ");
 	print_char_lcd((char)247);                        // degree symbol
     print_str_lcd("C\n");
 	
-	print_str_lcd("H(BMP):     "); 
+	print_str_lcd("H(BME):     "); 
     print_float_lcd(read_bme_humidity());
     print_str_lcd(" %RH\n");
 }
