@@ -13,18 +13,22 @@
 #include "Arduino.h"
 #include "bme280.h"
 #include "ds18B20.h"
+#include "damper_logic.h"
+#include "damper.h"
+#include "fan.h"
+#include "data.h"
 
 const int max_values = 30;
 float ring_buffer[max_values][3];
 int act_nb;
 unsigned long  timestamp_last_save;
-const int interval = 2; // 300 = 5 Min
+const int interval = 2 * 60; // in Sekunden
 boolean	first_round = 1;
 
 
 void data_setup()
 {
-    timestamp_last_save = millis() / 1000;
+    timestamp_last_save = timestamp_now_s();
 	act_nb = 0;
 }
 
@@ -66,7 +70,7 @@ float avarage_humidity_bme()
 	return (sum/(max + 1));
 }
 
-float delta_min_max_humidity_bme()
+float delta_min_max_humidity_bme() //gibt die Differenz zwischen max H und min H aus dem Ringbuffer zurück, außer bei ersten Füllen des Ringbuffers
 {
 	float	min_h;
 	float	max_h;
@@ -78,10 +82,7 @@ float delta_min_max_humidity_bme()
 	max_h = 0;
 	max = act_nb;
 	if (first_round)
-	{
-		Serial.println("delta H in erster Runde = 100");
 		return (100);
-	}
 	while (i <= max_values - 1)
 	{
 		if (ring_buffer[i][1] > max_h)
@@ -95,7 +96,7 @@ float delta_min_max_humidity_bme()
 
 void collect_data()
 {
-    if (millis() / 1000 - timestamp_last_save > interval)
+	if (timestamp_now_s() - timestamp_last_save > interval)
 	{
 		if (act_nb == max_values)
 		{
@@ -105,7 +106,27 @@ void collect_data()
 		ring_buffer[act_nb][0] = read_bme_temperature();
 		ring_buffer[act_nb][1] = read_bme_humidity();
 		ring_buffer[act_nb][2] = read_temp(0);
+		send_data_UART();
 		act_nb++;
-		timestamp_last_save = millis() / 1000;
+		timestamp_last_save = timestamp_now_s();
 	}
+}
+
+void send_data_UART()
+{
+	Serial.print("timestamp;");
+	Serial.print(timestamp_last_save);
+	Serial.print(";t_bme;");
+	Serial.print(read_bme_temperature(),2);
+	Serial.print(";h_bme;");
+	Serial.print(read_bme_humidity(),2);
+	Serial.print(";t_0;");
+	Serial.print(read_temp(0),2);
+	Serial.print(";state_damper;");
+	Serial.print(get_damper_state());
+	Serial.print(";state_fan;");
+	Serial.print(get_fan_state());
+	Serial.print(";state;");
+	Serial.print(get_state());
+	Serial.println(";");
 }

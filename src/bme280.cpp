@@ -21,11 +21,7 @@ Adafruit_BME280 bme; // I2C
 
 void BME280_setup()
 {
-	Serial.println(F("BME280 test"));
-	if (!bme.begin(0x76))
-		Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
-	else
-		Serial.println("BME280 OK");
+	bme.begin(0x76);
 }
 
 float read_bme_temperature()

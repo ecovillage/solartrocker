@@ -22,16 +22,15 @@ void display_values()
 	print_values_buttons();
 	print_storage();
 	print_status();
-	//print_time_lueften();
 	display_on_lcd();
 }
 
-void clear_text_status()
+void clear_text_state()
 {
 	text_status[0] = 0;
 }
 
-void set_text_status(char *text)
+void set_text_state(char *text)
 {
 	int i;
 

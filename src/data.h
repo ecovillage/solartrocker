@@ -18,5 +18,6 @@ void collect_data();
 float avarage_temp_bme();
 float avarage_humidity_bme();
 float delta_min_max_humidity_bme();
+void send_data_UART();
 
 #endif

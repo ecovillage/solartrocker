@@ -5,7 +5,7 @@ void damper_setup();
 
 void open_damper();
 void close_damper();
-int damper_state();
+int get_damper_state();
 void print_state_damper();
 
 #endif

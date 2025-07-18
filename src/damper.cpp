@@ -35,7 +35,7 @@ void close_damper()
 	state_damper = 0;
 }
 
-int damper_state()
+int get_damper_state()
 {
 	return (state_damper);
 }
@@ -45,7 +45,7 @@ void print_state_damper()
     //clear_lcd();
 	//set_position_cursor_lcd(0,0);
     print_str_lcd("Klappen:    ");
-	if (damper_state())
+	if (get_damper_state())
 		print_str_lcd("auf");
 	else
 		print_str_lcd("zu");

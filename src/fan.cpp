@@ -35,7 +35,7 @@ void fan_off()
 	state_fan = 0;
 }
 
-int fan_state()
+int get_fan_state()
 {
 	return (state_fan);
 }
@@ -45,7 +45,7 @@ void print_state_fan()
     //clear_lcd();
 	//set_position_cursor_lcd(0,0);
     print_str_lcd("Ventilator: ");
-	if (fan_state())
+	if (get_fan_state())
 		print_str_lcd("an");
 	else
 		print_str_lcd("aus");

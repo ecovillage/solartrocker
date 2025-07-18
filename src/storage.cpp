@@ -109,11 +109,8 @@ void print_serial_storage()
 	while (i < 11)
 	{
 		EEPROM.get(i * sizeof(int), value);
-		Serial.print(value);
-		Serial.print(", ");
 		i++;
 	}
-	Serial.print("\n");
 }
 
 void print_storage()

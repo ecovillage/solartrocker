@@ -17,7 +17,7 @@ void fan_setup();
 
 void fan_on();
 void fan_off();
-int fan_state();
+int get_fan_state();
 void print_state_fan();
 
 #endif
