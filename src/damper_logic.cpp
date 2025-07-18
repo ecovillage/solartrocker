@@ -5,11 +5,11 @@
 #include "fan.h"
 #include "data.h"
 #include "lcd.h"
+#include "display.h"
 
-const size_t	HUMIDITY    = 0;
-const size_t	TEMPERATURE = 1;
-const int		time_dehydrating = 60; // 1min
-unsigned long	timestamp_dehydrating = -time_dehydrating;
+const int		time_dehydrating = 180; // Sekunden
+const int		time_block_dehydrating = 300 + time_dehydrating; // Sekunden
+unsigned long	timestamp_dehydrating = 0;
 const float		min_percent_change_hydr = 0.5;
 
 /** Check whether we are on the "right" side of the curve.      */
@@ -40,31 +40,39 @@ unsigned long timestamp_now_s(void)
 	return (millis()/1000);
 }
 
-boolean check_humidity()
+void check_hydrating()
 {
-	if (!(timestamp_now_s() - timestamp_dehydrating < time_dehydrating))
+	if (!(timestamp_now_s() - timestamp_dehydrating < time_dehydrating)) // not (81258 - 81250 = 8 < 180)
 	{
-		if (air_too_moist(read_bme_humidity(),read_bme_temperature()))
+		if (!(timestamp_now_s() - timestamp_dehydrating < time_block_dehydrating))  // check air_too_moist aussetzen damit ausgetauschte Luft sich erwährmen und Feuchte aufnehmen kann.
 		{
-			Serial.println("Luftfeuchte zu hoch, öffne Klappen, schalte Fan an");
-			fan_on();
-			open_damper();
-			timestamp_dehydrating = timestamp_now_s();
-			return (true);
+			if (air_too_moist(read_bme_humidity(),read_bme_temperature()))
+			{
+				Serial.println("Luftfeuchte zu hoch, öffne Klappen, schalte Fan an");
+				fan_on();
+				open_damper();
+				timestamp_dehydrating = timestamp_now_s();
+				set_text_status("Lueften");
+			}
+			else
+			{
+				close_damper();
+				Serial.println("Luftfeuchte ok");
+				Serial.println(timestamp_now_s() - timestamp_dehydrating);
+				set_text_status("ok");
+				check_fan_neccessary();
+			}
 		}
 		else
 		{
-			close_damper();
-			Serial.println("Luftfeuchte ok");
-			Serial.println(timestamp_now_s() - timestamp_dehydrating);
+			set_text_status("Luef. block");
 		}
-		return (false);
 	}
 	else
 	{
+		set_text_status("Lueften");
 		Serial.print("Modus: Lüften noch (s): ");
 		Serial.println(time_dehydrating - timestamp_now_s() - timestamp_dehydrating);
-		return (true);
 	}
 }
 
@@ -79,9 +87,11 @@ void check_fan_neccessary()
 	{	
 		Serial.println("Luftfeuchte zu konstant, schalte Fan aus");
 		fan_off();
+		set_text_status("RF zu konst");
 	}
 	else
 		fan_on();
+		clear_text_status();
 }
 
 void print_time_lueften()

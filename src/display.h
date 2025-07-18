@@ -14,5 +14,8 @@
 #define DISPLAY_H
 
 void display_values();
+void clear_text_status();
+void set_text_status(char *text);
+void print_status();
 
 #endif

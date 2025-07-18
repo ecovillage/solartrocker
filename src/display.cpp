@@ -9,6 +9,7 @@
 #include "storage.h"
 #include "damper_logic.h"
 
+char text_status[12];
 
 void display_values()
 {
@@ -20,6 +21,32 @@ void display_values()
 	print_values_DS18B20();
 	print_values_buttons();
 	print_storage();
-	print_time_lueften();
+	print_status();
+	//print_time_lueften();
 	display_on_lcd();
+}
+
+void clear_text_status()
+{
+	text_status[0] = 0;
+}
+
+void set_text_status(char *text)
+{
+	int i;
+
+	i = 0;	
+	while  (i < 11 && text[i]  != 0)
+	{
+		text_status[i] = text[i];
+		i++;
+	}
+	text_status[i] = 0;
+}
+
+void print_status()
+{
+	print_str_lcd("Status: ");
+	print_str_lcd(text_status);
+	print_str_lcd("\n");
 }
