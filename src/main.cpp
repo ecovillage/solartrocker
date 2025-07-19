@@ -18,7 +18,7 @@
 //void requestEvent();
 //static int i2c_target = 4;
 unsigned long	timestamp_state_manuel = 0;
-const int		time_state_manuel = 60; // Sekunden
+const int		time_state_manuel = 0.5 * 60; // Sekunden
 
 void state_manuel()
 {
@@ -27,6 +27,8 @@ void state_manuel()
 		open_damper();
 		delay(200);
 	}
+	else
+		close_damper();
 	if (button2_pressed())
 	{
 		if (get_fan_state() == 0)
@@ -64,6 +66,7 @@ void loop()
 	if (button1_pressed() || button2_pressed() || button3_pressed()){
 		set_state(4);
 		timestamp_state_manuel = timestamp_now_s();
+		delay(1000);
 	}
 	if (get_state() == 0)
 		state_auto();

@@ -9,7 +9,7 @@
 
 const int		time_dehydrating = 2 * 60; // Sekunden
 unsigned long	timestamp_dehydrating = 0;
-const int		time_block_dehydrating = 10 * 60; // Sekunden
+const int		time_block_dehydrating = 5 * 60; // Sekunden
 unsigned long	timestamp_heating = 0;
 const float		min_percent_change_hydr = 0.5;
 float			temp_start_heating;
@@ -53,7 +53,7 @@ boolean air_too_moist(float air_humidity_inside, float air_temperature_inside) {
 		else
 			return (false);
 	}
-	else if (air_humidity_inside > (117.68 - 2.80 * air_temperature_inside + 0.0192 * air_temperature_inside * air_temperature_inside))
+	else if (air_humidity_inside > (137.68 - 2.80 * air_temperature_inside + 0.0192 * air_temperature_inside * air_temperature_inside)) //(117.68 - 2.80 * air_temperature_inside + 0.0192 * air_temperature_inside * air_temperature_inside)
 		return (true);
 	return (false);
 }
