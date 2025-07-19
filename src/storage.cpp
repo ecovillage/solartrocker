@@ -59,7 +59,7 @@ void save_max_temp()
 	int temperatur;
 
 	limit = read_max_temp_EEPROM();
-	temperatur = read_bme_temperature();
+	temperatur = (int)read_bme_temperature();
 	if (temperatur > limit + 1)
 		set_max_temp_EEPROM(temperatur);
 }
@@ -84,7 +84,7 @@ void print_serial_storage()
 
 void print_storage()
 {
-	print_str_lcd("max Temp >= ");
+	print_str_lcd("max Temp:   ");
 	print_int_lcd(read_max_temp_EEPROM());
 	print_str_lcd(" ");
 	print_char_lcd((char)247);                        // degree symbol

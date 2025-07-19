@@ -10,20 +10,20 @@
 #include "damper_logic.h"
 
 char text_status[12];
-int time;
+int time_LCD;
 
 void display_values()
 {
 	clear_lcd();
 	set_position_cursor_lcd(0,0);
-	print_state_damper();
-	print_state_fan();
-	print_values_BME280();
-	print_values_DS18B20();
-	print_values_buttons();
-	print_storage();
 	print_status();
 	print_time();
+	print_values_BME280();
+	print_values_DS18B20();
+	print_storage();
+	print_state_damper();
+	print_state_fan();
+	//print_values_buttons();
 	display_on_lcd();
 }
 
@@ -47,19 +47,19 @@ void set_text_state(char *text)
 
 void set_time_LCD(unsigned long nb)
 {
-	time = (int)nb;
+	time_LCD = (int)nb;
 }
 
 void print_time()
 {
-	print_str_lcd("Dauer: ");
-	print_int_lcd(time);
+	print_str_lcd("Dauer:      ");
+	print_int_lcd(time_LCD);
 	print_str_lcd(" s\n");
 }
 
 void print_status()
 {
-	print_str_lcd("Status: ");
+	print_str_lcd("Status:     ");
 	print_str_lcd(text_status);
 	print_str_lcd("\n");
 }

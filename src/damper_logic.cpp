@@ -25,24 +25,21 @@ void state_manuel()
 {
 	if (button1_pressed())
 	{
-		open_damper();
-		delay(200);
+		set_state(1);
+		delay(1000);
 	}
 	else
 		close_damper();
 	if (button2_pressed())
 	{
-		if (get_fan_state() == 0)
-			fan_on();
-		else
-			fan_off();
-		delay(200);
+		set_state(2);
+		delay(1000);
 	}
 	if (button3_pressed())
 	{
 		//set_modus(read_modus() + 1);
 		reset_max_temp();
-		delay(200);
+		delay(1000);
 	}
 	if (timestamp_now_s() - timestamp_state_manuel > time_state_manuel)
 	{
@@ -68,6 +65,7 @@ void set_state(int nb)
 	{
 		set_text_state("Heizen");
 		timestamp_heating = timestamp_now_s();
+		temp_start_heating = read_bme_temperature();
 	}
 	else if (state == 3)
 	{
@@ -141,7 +139,6 @@ void state_dehydrating()
 	if (timestamp_now_s() - timestamp_dehydrating > time_dehydrating)
 	{
 		set_state(2);
-		temp_start_heating = read_bme_temperature();
 	}
 	set_time_LCD(time_dehydrating - (timestamp_now_s() - timestamp_dehydrating));	
 }
@@ -151,7 +148,9 @@ void state_heating()
 	close_damper();
 	fan_on();
 	if (read_bme_temperature() - temp_start_heating > 1)
+	{
 		timestamp_heating = timestamp_now_s();
+	}
 	if (timestamp_now_s() - timestamp_heating > time_heating)
 	{
 		set_state(0);
