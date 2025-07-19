@@ -19,7 +19,7 @@
 #include "data.h"
 
 const int max_values = 30;
-float ring_buffer[max_values][3];
+float ring_buffer[max_values][4];
 int act_nb;
 unsigned long  timestamp_last_save;
 const int interval = 2 * 60; // in Sekunden
@@ -106,6 +106,7 @@ void collect_data()
 		ring_buffer[act_nb][0] = read_bme_temperature();
 		ring_buffer[act_nb][1] = read_bme_humidity();
 		ring_buffer[act_nb][2] = read_temp(0);
+		ring_buffer[act_nb][3] = calculateAbsoluteHumidity(ring_buffer[act_nb][0], ring_buffer[act_nb][1]);
 		send_data_UART();
 		act_nb++;
 		timestamp_last_save = timestamp_now_s();
@@ -117,11 +118,13 @@ void send_data_UART()
 	Serial.print("timestamp;");
 	Serial.print(timestamp_last_save);
 	Serial.print(";t_bme;");
-	Serial.print(read_bme_temperature(),2);
+	Serial.print(ring_buffer[act_nb][0],2);
 	Serial.print(";h_bme;");
-	Serial.print(read_bme_humidity(),2);
+	Serial.print(ring_buffer[act_nb][1],2);
 	Serial.print(";t_0;");
-	Serial.print(read_temp(0),2);
+	Serial.print(ring_buffer[act_nb][2],2);
+	Serial.print(";AbsoluteHumidity;");
+	Serial.print(ring_buffer[act_nb][3],2);	
 	Serial.print(";state_damper;");
 	Serial.print(get_damper_state());
 	Serial.print(";state_fan;");
@@ -129,4 +132,34 @@ void send_data_UART()
 	Serial.print(";state;");
 	Serial.print(get_state());
 	Serial.println(";");
+}
+
+float calculateAbsoluteHumidity(float temperature, float relativeHumidity) //ChatGPT
+{
+	float saturationVaporPressure;
+	float absoluteHumidity;
+
+    saturationVaporPressure = 6.112f * expf((17.67f * temperature) / (temperature + 243.5f)); // Sättigungsdampfdruck (Magnus-Formel)
+    absoluteHumidity = (saturationVaporPressure * relativeHumidity * 2.1674f) / (273.15f + temperature);  // Absolute Feuchte (in g/m³)
+    
+    return (absoluteHumidity);
+}
+
+float calculatePineEMC(float temperature, float relativeHumidity) //ChatGPT
+{
+	float h = relativeHumidity / 100.0f;  // rF in Dezimalform (0..1)
+	float T_Kelvin = temperature + 273.15f;
+
+    // Kiefer-spezifische Koeffizienten
+    float K = 0.81f * exp(4800.0f / (8.314f * T_Kelvin));  // Q = 4800 J/mol
+    float K1 = 4.7f;
+    float K2 = 0.53f;
+
+    // Berechnung
+    float term1 = (K * h) / (1.0f + K * h);
+    float term2 = (K1 * K * h + 2.0f * K1 * K2 * K * K * h * h);
+    float term3 = (1.0f + K1 * K * h + K1 * K2 * K * K * h * h);
+    float EMC = (1800.0f / 18.0f) * (term1 + (term2 / term3));
+
+    return EMC;
 }

@@ -19,5 +19,7 @@ float avarage_temp_bme();
 float avarage_humidity_bme();
 float delta_min_max_humidity_bme();
 void send_data_UART();
+float calculateAbsoluteHumidity(float temperature, float relativeHumidity);
+float calculatePineEMC(float temperature, float relativeHumidity);
 
 #endif

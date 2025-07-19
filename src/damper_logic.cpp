@@ -7,12 +7,13 @@
 #include "lcd.h"
 #include "display.h"
 
-const int		time_dehydrating = 3 * 60; // Sekunden
+const int		time_dehydrating = 2 * 60; // Sekunden
 unsigned long	timestamp_dehydrating = 0;
-const int		time_block_dehydrating = 5 * 60; // Sekunden
+const int		time_block_dehydrating = 10 * 60; // Sekunden
 unsigned long	timestamp_heating = 0;
 const float		min_percent_change_hydr = 0.5;
-int state = 0;
+float			temp_start_heating;
+int 			state = 0;
 
 void set_state(int nb)
 {
@@ -90,6 +91,7 @@ void state_dehydrating()
 	{
 		set_state(2);
 		timestamp_heating = timestamp_now_s();
+		temp_start_heating = read_bme_temperature();
 	}
 }
 
@@ -97,9 +99,10 @@ void state_heating()
 {
 	close_damper();
 	fan_on();
+	if (read_bme_temperature() - temp_start_heating > 1)
+		timestamp_heating = timestamp_now_s();
 	if (timestamp_now_s() - timestamp_heating > time_block_dehydrating)
 		set_state(0);
-	
 }
 
 boolean is_hydrating_const()
