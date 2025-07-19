@@ -6,28 +6,79 @@
 #include "data.h"
 #include "lcd.h"
 #include "display.h"
+#include "buttons.h"
+#include "storage.h"
+#include "ds18B20.h"
 
 const int		time_dehydrating = 2 * 60; // Sekunden
 unsigned long	timestamp_dehydrating = 0;
-const int		time_block_dehydrating = 5 * 60; // Sekunden
+const int		time_heating = 5 * 60; // Sekunden
 unsigned long	timestamp_heating = 0;
-const float		min_percent_change_hydr = 0.5;
+const float		min_percent_change_hydr = 5;
 float			temp_start_heating;
+unsigned long	timestamp_auto = 0;
+unsigned long	timestamp_state_manuel = 0;
+const int		time_state_manuel = 0.5 * 60; // Sekunden
 int 			state = 0;
+
+void state_manuel()
+{
+	if (button1_pressed())
+	{
+		open_damper();
+		delay(200);
+	}
+	else
+		close_damper();
+	if (button2_pressed())
+	{
+		if (get_fan_state() == 0)
+			fan_on();
+		else
+			fan_off();
+		delay(200);
+	}
+	if (button3_pressed())
+	{
+		//set_modus(read_modus() + 1);
+		reset_max_temp();
+		delay(200);
+	}
+	if (timestamp_now_s() - timestamp_state_manuel > time_state_manuel)
+	{
+		set_state(0);
+	}
+	set_time_LCD(time_state_manuel - (timestamp_now_s() - timestamp_state_manuel));
+}
 
 void set_state(int nb)
 {
 	state = nb;
 	if (state == 0)
+	{
 		set_text_state("auto");
+		timestamp_auto = timestamp_now_s();
+	}
 	else if (state == 1)
+	{
 		set_text_state("Lueften");
+		timestamp_dehydrating = timestamp_now_s();
+	}
 	else if (state == 2)
+	{
 		set_text_state("Heizen");
+		timestamp_heating = timestamp_now_s();
+	}
 	else if (state == 3)
+	{
 		set_text_state("RF konst");
+		set_time_LCD(0);
+	}
 	else if (state == 4)
+	{
 		set_text_state("manuell");
+		timestamp_state_manuel = timestamp_now_s();
+	}
 }
 
 int get_state()
@@ -53,7 +104,7 @@ boolean air_too_moist(float air_humidity_inside, float air_temperature_inside) {
 		else
 			return (false);
 	}
-	else if (air_humidity_inside > (137.68 - 2.80 * air_temperature_inside + 0.0192 * air_temperature_inside * air_temperature_inside)) //(117.68 - 2.80 * air_temperature_inside + 0.0192 * air_temperature_inside * air_temperature_inside)
+	else if (air_humidity_inside > (127.68 - 2.80 * air_temperature_inside + 0.0192 * air_temperature_inside * air_temperature_inside)) //(117.68 - 2.80 * air_temperature_inside + 0.0192 * air_temperature_inside * air_temperature_inside)
 		return (true);
 	return (false);
 }
@@ -68,7 +119,6 @@ void state_auto()
 	if (air_too_moist(read_bme_humidity(),read_bme_temperature()))
 	{
 		set_state(1);
-		timestamp_dehydrating = timestamp_now_s();
 		return ;
 	}
 	else if (is_hydrating_const())
@@ -81,6 +131,7 @@ void state_auto()
 		fan_on();
 		close_damper();
 	}
+	set_time_LCD(timestamp_now_s() - timestamp_auto);
 }	
 
 void state_dehydrating()
@@ -90,9 +141,9 @@ void state_dehydrating()
 	if (timestamp_now_s() - timestamp_dehydrating > time_dehydrating)
 	{
 		set_state(2);
-		timestamp_heating = timestamp_now_s();
 		temp_start_heating = read_bme_temperature();
 	}
+	set_time_LCD(time_dehydrating - (timestamp_now_s() - timestamp_dehydrating));	
 }
 
 void state_heating()
@@ -101,8 +152,11 @@ void state_heating()
 	fan_on();
 	if (read_bme_temperature() - temp_start_heating > 1)
 		timestamp_heating = timestamp_now_s();
-	if (timestamp_now_s() - timestamp_heating > time_block_dehydrating)
+	if (timestamp_now_s() - timestamp_heating > time_heating)
+	{
 		set_state(0);
+	}
+	set_time_LCD(time_heating - (timestamp_now_s() - timestamp_heating));
 }
 
 boolean is_hydrating_const()
@@ -119,22 +173,27 @@ boolean is_hydrating_const()
 void state_const_hydrating()
 {
 	if (is_hydrating_const())
-		fan_off();
+	{
+		if (read_bme_temperature() > read_temp(0) + 5)
+			set_state(1);
+		else
+			fan_off();
+	}
 	else
 		set_state(0);
 }
 
-void check_fan_neccessary()
-{
-	float	delta;
+// void check_fan_neccessary()
+// {
+// 	float	delta;
 
-	delta = delta_min_max_humidity_bme();
-	if (delta < min_percent_change_hydr)
-	{	
-		fan_off();
-		set_text_state("RF zu konst");
-	}
-	else
-		fan_on();
-		clear_text_state();
-}
+// 	delta = delta_min_max_humidity_bme();
+// 	if (delta < min_percent_change_hydr)
+// 	{	
+// 		fan_off();
+// 		set_text_state("RF zu konst");
+// 	}
+// 	else
+// 		fan_on();
+// 		clear_text_state();
+// }

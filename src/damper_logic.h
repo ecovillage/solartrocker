@@ -12,5 +12,6 @@ unsigned long timestamp_now_s(void);
 void set_state(int nb);
 int get_state();
 boolean is_hydrating_const();
+void state_manuel();
 
 #endif

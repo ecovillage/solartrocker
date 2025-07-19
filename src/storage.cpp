@@ -17,13 +17,7 @@
 #include "bme280.h"
 
 int modus_adress = 0;
-int max20_adress = modus_adress + sizeof(int);
-int max30_adress = max20_adress + sizeof(int);
-int max40_adress = max30_adress + sizeof(int);
-int max50_adress = max40_adress + sizeof(int);
-int max60_adress = max50_adress + sizeof(int);
-int max70_adress = max60_adress + sizeof(int);
-int max80_adress = max70_adress + sizeof(int);
+int max_temp_adress = modus_adress + sizeof(int);
 
 // Funktion zum Speichern eines Wertes im EEPROM
 void storeValueInEEPROM(int address, int value)
@@ -49,55 +43,30 @@ int read_modus()
 	return (readValueFromEEPROM(modus_adress));
 }
 
-int read_limit(int limit)
+int read_max_temp_EEPROM()
 {
-	return (readValueFromEEPROM((limit / 10 - 1) * sizeof(int)));
+	return (readValueFromEEPROM(max_temp_adress));
 }
 
-void set_limit(int limit, int nb)
+void set_max_temp_EEPROM(int nb)
 {
-	storeValueInEEPROM((limit / 10 - 1) * sizeof(int), nb);
+	storeValueInEEPROM(max_temp_adress, nb);
 }
 
 void save_max_temp()
 {
 	int	limit;
+	int temperatur;
 
-	limit = 20;
-	while (limit < 90)
-	{
-		if (read_bme_temperature() > limit && read_limit(limit) == 0)
-			set_limit(limit, 1);
-		limit += 10;
-	}
-}
-
-int calc_max_temp()
-{
-	int	limit;
-	int max_temp;
-
-	limit = 20;
-
-	while (limit < 90)
-	{
-		if (read_limit(limit) == 1)
-			max_temp = limit;
-		limit += 10;
-	}
-	return (max_temp);
+	limit = read_max_temp_EEPROM();
+	temperatur = read_bme_temperature();
+	if (temperatur > limit + 1)
+		set_max_temp_EEPROM(temperatur);
 }
 
 void reset_max_temp()
 {
-	int	limit;
-
-	limit = 20;
-	while (limit < 90)
-	{
-		set_limit(limit, 0);
-		limit += 10;
-	}
+	set_max_temp_EEPROM(0);
 }
 
 void print_serial_storage()
@@ -115,8 +84,8 @@ void print_serial_storage()
 
 void print_storage()
 {
-	print_str_lcd("max Temp >  ");
-	print_int_lcd(calc_max_temp());
+	print_str_lcd("max Temp >= ");
+	print_int_lcd(read_max_temp_EEPROM());
 	print_str_lcd(" ");
 	print_char_lcd((char)247);                        // degree symbol
     print_str_lcd("C\n");

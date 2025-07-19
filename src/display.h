@@ -17,5 +17,7 @@ void display_values();
 void clear_text_state();
 void set_text_state(char *text);
 void print_status();
+void print_time();
+void set_time_LCD(unsigned long nb);
 
 #endif

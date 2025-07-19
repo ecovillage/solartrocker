@@ -10,6 +10,7 @@
 #include "damper_logic.h"
 
 char text_status[12];
+int time;
 
 void display_values()
 {
@@ -22,6 +23,7 @@ void display_values()
 	print_values_buttons();
 	print_storage();
 	print_status();
+	print_time();
 	display_on_lcd();
 }
 
@@ -41,6 +43,18 @@ void set_text_state(char *text)
 		i++;
 	}
 	text_status[i] = 0;
+}
+
+void set_time_LCD(unsigned long nb)
+{
+	time = (int)nb;
+}
+
+void print_time()
+{
+	print_str_lcd("Dauer: ");
+	print_int_lcd(time);
+	print_str_lcd(" s\n");
 }
 
 void print_status()
