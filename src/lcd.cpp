@@ -13,6 +13,8 @@
 #include "Arduino.h"
 #include <Adafruit_SSD1306.h>
 #include "lcd.h"
+#include "buttons.h"
+#include "fan.h"
 
 // Display
 #define OLED_MOSI    9
@@ -43,7 +45,12 @@ void set_position_cursor_lcd(int row, int column)
 	display.setCursor(row, column);
 }
 
-void print_str_lcd(char *str)
+void  setTextColor_display(uint16_t c, uint16_t bg)
+{
+	display.setTextColor(c, bg);
+}
+
+void print_str_lcd(const char *str)
 {
 	display.print(str);
 }

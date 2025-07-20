@@ -82,7 +82,7 @@ void print_serial_storage()
 	}
 }
 
-void print_storage()
+void print_max_temp()
 {
 	print_str_lcd("max Temp:   ");
 	print_int_lcd(read_max_temp_EEPROM());

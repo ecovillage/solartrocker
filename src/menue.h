@@ -10,18 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STORAGE_H
-#define STORAGE_H
+#ifndef MENUE_H
+#define MENUE_H
 
-void storeValueInEEPROM(int address, int value);
-int readValueFromEEPROM(int address);
-void set_modus(int nb);
-int read_modus();
-int read_max_temp_EEPROM(int limit);
-void set_max_temp_EEPROM(int limit, int nb);
-void save_max_temp();
-void reset_max_temp();
-void print_serial_storage();
-void print_max_temp();
+struct MenuItem {
+  const char* label;
+  void (*action)();  // Funktionszeiger auf eine Funktion ohne Parameter und ohne Rückgabewert
+};
+
+void handleSelection(int index);
+void drawMenu();
+void show_menue();
+void drawMenuItem(char *nb, char *entry, bool selected);
 
 #endif

@@ -26,10 +26,9 @@ void setup()
 
 void loop()
 {
-	if (button1_pressed() || button2_pressed() || button3_pressed())
+	if (button1_pressed())
 	{
 		set_state(4);
-		delay(1000);
 	}
 	if (get_state() == 0)
 		state_auto();
@@ -38,11 +37,14 @@ void loop()
 	else if (get_state() == 2)
 		state_heating();
 	else if (get_state() == 3)
-		state_const_hydrating();
+		state_RF_const();
 	else if (get_state() == 4)
-		state_manuel();
+	{
+		state_menue();
+		return ;
+	}
 	save_max_temp();
-	display_values();
+	show_values();
 	collect_data();
 	delay(100);
 }

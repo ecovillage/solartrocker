@@ -23,7 +23,7 @@ float ring_buffer[max_values][4];
 int act_nb;
 unsigned long  timestamp_last_save;
 const int interval = 1 * 60; // in Sekunden
-boolean	first_round = 1;
+bool	first_round = 1;
 
 
 void data_setup()

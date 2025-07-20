@@ -3,9 +3,9 @@
 
 void buttons_setup();
 
-boolean button1_pressed();
-boolean button2_pressed();
-boolean button3_pressed();
+bool button1_pressed();
+bool button2_pressed();
+bool button3_pressed();
 void print_values_buttons();
 
 #endif

@@ -25,17 +25,17 @@ void buttons_setup()
 	pinMode(pin_button3, INPUT_PULLUP);
 }
 
-boolean button1_pressed()
+bool button1_pressed()
 {
 	return (digitalRead(pin_button1) == LOW);
 }
 
-boolean button2_pressed()
+bool button2_pressed()
 {
 	return (digitalRead(pin_button2) == LOW);
 }
 
-boolean button3_pressed()
+bool button3_pressed()
 {
 	return (digitalRead(pin_button3) == LOW);
 }

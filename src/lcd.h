@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fan.h                                              :+:      :+:    :+:   */
+/*   lcd.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jweingar <jweingar@student.42wolf>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,9 +14,9 @@
 #define LCD_H
 
 void lcd_setup();
-
 void clear_lcd();
-void print_str_lcd(char *str);
+void  setTextColor_display(uint16_t c, uint16_t bg);
+void print_str_lcd(const char *str);
 void print_char_lcd(char c);
 void print_float_lcd(float nbr);
 void print_int_lcd(int nbr);
