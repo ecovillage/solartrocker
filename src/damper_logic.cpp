@@ -20,6 +20,7 @@ unsigned long	timestamp_auto = 0;
 unsigned long	timestamp_state_manuel = 0;
 const int		time_state_manuel = 0.5 * 60; // Sekunden
 int 			state = 0;
+int				last_state = 0;
 
 void state_manuel()
 {
@@ -43,13 +44,14 @@ void state_manuel()
 	}
 	if (timestamp_now_s() - timestamp_state_manuel > time_state_manuel)
 	{
-		set_state(0);
+		set_state(last_state);
 	}
 	set_time_LCD(time_state_manuel - (timestamp_now_s() - timestamp_state_manuel));
 }
 
 void set_state(int nb)
 {
+	last_state = state;
 	state = nb;
 	if (state == 0)
 	{
@@ -150,6 +152,7 @@ void state_heating()
 	if (read_bme_temperature() - temp_start_heating > 1)
 	{
 		timestamp_heating = timestamp_now_s();
+		temp_start_heating = read_bme_temperature();
 	}
 	if (timestamp_now_s() - timestamp_heating > time_heating)
 	{
