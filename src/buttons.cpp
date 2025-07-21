@@ -18,6 +18,10 @@ int pin_button1 = 5;
 int pin_button2 = 4;
 int pin_button3 = 3;
 
+bool last_state_b1 = false;
+bool last_state_b2 = false;
+bool last_state_b3 = false;
+
 void buttons_setup()
 {
     pinMode(pin_button1, INPUT_PULLUP);
@@ -27,17 +31,48 @@ void buttons_setup()
 
 bool button1_pressed()
 {
-	return (digitalRead(pin_button1) == LOW);
+	if (digitalRead(pin_button1) == LOW && last_state_b1 == false)
+	{
+		delay(100);
+		last_state_b1 = true;
+		return (true);
+	}
+	else if (digitalRead(pin_button1) == HIGH)
+	{
+		last_state_b1 = false;
+	}
+	return (false);
 }
+
 
 bool button2_pressed()
 {
-	return (digitalRead(pin_button2) == LOW);
+	if (digitalRead(pin_button2) == LOW && last_state_b2 == false)
+	{
+		delay(100);
+		last_state_b2 = true;
+		return (true);
+	}
+	else if (digitalRead(pin_button2) == HIGH)
+	{
+		last_state_b2 = false;
+	}
+	return (false);
 }
 
 bool button3_pressed()
 {
-	return (digitalRead(pin_button3) == LOW);
+	if (digitalRead(pin_button3) == LOW && last_state_b3 == false)
+	{
+		delay(100);
+		last_state_b3 = true;
+		return (true);
+	}
+	else if (digitalRead(pin_button3) == HIGH)
+	{
+		last_state_b3 = false;
+	}
+	return (false);
 }
 
 void print_values_buttons()

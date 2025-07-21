@@ -26,8 +26,6 @@ MenuItem menuItems[] = {
   {"Reset max Temp", reset_max_temp},
 };
 
-
-
 const int menuItemCount = sizeof(menuItems) / sizeof(menuItems[0]);
 int selectedItem = 0;
 
@@ -41,6 +39,7 @@ void handleSelection() {
 void drawMenu() {
 	clear_lcd();
 	set_position_cursor_lcd(0,0);
+	print_str_lcd("-- MENUE --\n\n");
 	for (int i = 0; i < menuItemCount; i++) {
 		if (i == selectedItem)
 			setTextColor_display(BLACK, WHITE);
@@ -55,10 +54,10 @@ void drawMenu() {
 void show_menue()
 {
 	if (button1_pressed()) {
-  		selectedItem = ((selectedItem - 1) % menuItemCount + menuItemCount) % menuItemCount;
+  		selectedItem = ((selectedItem + 1) % menuItemCount + menuItemCount) % menuItemCount;
 	}
 	if (button2_pressed()) {
-  		selectedItem = ((selectedItem + 1) % menuItemCount + menuItemCount) % menuItemCount;
+  		set_state_auto();
 	}
 	if (button3_pressed()) {
  		handleSelection();

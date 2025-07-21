@@ -15,6 +15,7 @@
 #include "lcd.h"
 #include "buttons.h"
 #include "fan.h"
+#include "siebenlindenlogo.h"
 
 // Display
 #define OLED_MOSI    9
@@ -73,4 +74,13 @@ void print_int_lcd(int nbr)
 void display_on_lcd()
 {
 	display.display();
+}
+
+void show_logo() {
+  display.clearDisplay();
+  display.drawBitmap(0, 0, siebenLindenLogo, SCREEN_WIDTH, SCREEN_HEIGHT, SSD1306_WHITE);
+  display.display();
+  delay(3000);  // 3 Sekunden warten
+  display.clearDisplay();
+  display.display();
 }

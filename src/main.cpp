@@ -22,6 +22,7 @@ void setup()
 	buttons_setup();
 	Wire.begin();
 	set_state(0);
+	show_logo();
 }
 
 void loop()
