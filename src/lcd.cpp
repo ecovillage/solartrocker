@@ -80,7 +80,24 @@ void show_logo() {
   display.clearDisplay();
   display.drawBitmap(0, 0, siebenLindenLogo, SCREEN_WIDTH, SCREEN_HEIGHT, SSD1306_WHITE);
   display.display();
-  delay(3000);  // 3 Sekunden warten
-  display.clearDisplay();
-  display.display();
+}
+
+void drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
+{
+	display.drawFastHLine(x, y, w , color);
+}
+
+void drawPixel(int16_t x, int16_t y, uint16_t color)
+{
+	display.drawPixel(x, y, color);
+}
+
+int get_screen_height()
+{
+	return(SCREEN_HEIGHT);
+}
+
+int get_screen_width()
+{
+	return(SCREEN_WIDTH);
 }

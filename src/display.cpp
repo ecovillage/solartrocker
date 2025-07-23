@@ -8,9 +8,33 @@
 #include "buttons.h"
 #include "storage.h"
 #include "damper_logic.h"
+#include "graph.h"
+#include "data.h"
 
 char text_state[12];
 int time_LCD;
+unsigned long	timestamp_display = 0;
+const int		time_display = 3; // Sekunden
+int				modus_display = 0;
+
+void display()
+{
+	if (modus_display == 0)
+		show_logo();
+	if (modus_display == 1)
+		show_values();
+	if (modus_display == 2)
+		plot_graph((int *)get_ring_buffer(1), "F", 20, 80);
+	if (modus_display == 3)
+		plot_graph((int *)get_ring_buffer(0), "T", 15, 55);
+	if (timestamp_now_s() - timestamp_display > time_display)
+	{
+		modus_display++;
+		if (modus_display > 3)
+			modus_display = 1;
+	}
+	
+}
 
 void show_values()
 {

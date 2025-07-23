@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   data.h                                             :+:      :+:    :+:   */
+/*   graph.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jweingar <jweingar@student.42wolf>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/18 14:19:43 by jweingar          #+#    #+#             */
-/*   Updated: 2024/08/18 14:19:43 by jweingar         ###   ########.fr       */
+/*   Created: 2025/07/23 12:50:58 by jweingar          #+#    #+#             */
+/*   Updated: 2025/07/23 12:50:58 by jweingar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DATA_H
-#define DATA_H
+#ifndef GRAPH_H
+#define GRAPH_H
 
-void data_setup();
-void collect_data();
-float avarage_temp_bme();
-float avarage_humidity_bme();
-float delta_min_max_humidity_bme();
-void send_data_UART();
-float calculateAbsoluteHumidity(float temperature, float relativeHumidity);
-float calculatePineEMC(float temperature, float relativeHumidity);
-float* get_ring_buffer(int i);
+void draw_graph(int *graph, int b_min);
+void draw_background(char *text, int b_min, int b_max);
+void plot_graph(int *graph, char *text, int b_min, int b_max);
 
 #endif

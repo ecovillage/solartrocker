@@ -18,11 +18,11 @@
 #include "fan.h"
 #include "data.h"
 
-const int max_values = 30;
+const int max_values = 100;
 float ring_buffer[max_values][4];
 int act_nb;
 unsigned long  timestamp_last_save;
-const int interval = 1 * 60; // in Sekunden
+const int interval = 20; // in Sekunden
 bool	first_round = 1;
 
 
@@ -162,4 +162,9 @@ float calculatePineEMC(float temperature, float relativeHumidity) //ChatGPT
     float EMC = (1800.0f / 18.0f) * (term1 + (term2 / term3));
 
     return EMC;
+}
+
+float* get_ring_buffer(int i)
+{
+	return (ring_buffer[i]);
 }
