@@ -168,3 +168,8 @@ float* get_ring_buffer(int i)
 {
 	return (ring_buffer[i]);
 }
+
+int get_max_values()
+{
+	return (max_values);
+}

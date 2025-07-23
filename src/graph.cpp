@@ -14,23 +14,24 @@
 #include "graph.h"
 #include "lcd.h"
 #include <Adafruit_SSD1306.h>
+#include "data.h"
 
 void draw_graph(int *graph, int b_min)
 {
   //display.clearDisplay();
-  for (int i = 13; i < get_screen_width() - 1; i++)
+  for (int i = 0; i < get_max_values() - 1; i++)
   {
-     drawPixel(i, get_screen_height() - 1 - graph[i] + b_min, WHITE);
+     drawPixel(13 + i, get_screen_height() - 1 - graph[i] + b_min, WHITE);
   }
   //display.display();
 }
 
 void draw_background(char *text, int b_min, int b_max)
 {
-  drawFastHLine(13, get_screen_height() - 1 - 60, get_screen_width() , WHITE);
-  drawFastHLine(0, get_screen_height() - 1 - 40, get_screen_width() , WHITE);
-  drawFastHLine(0, get_screen_height() - 1 - 20, get_screen_width() , WHITE);
-  drawFastHLine(0, get_screen_height() - 1 - 0, get_screen_width() , WHITE);
+  drawFastHLine(13, get_screen_height() - 1 - 60, get_screen_width(), WHITE);
+  drawFastHLine(0, get_screen_height() - 1 - 40, get_screen_width(), WHITE);
+  drawFastHLine(0, get_screen_height() - 1 - 20, get_screen_width(), WHITE);
+  drawFastHLine(0, get_screen_height() - 1 - 0, get_screen_width(), WHITE);
   set_position_cursor_lcd(0, 0);
   print_str_lcd(text);
   set_position_cursor_lcd(0, 15);

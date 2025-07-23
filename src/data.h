@@ -22,5 +22,6 @@ void send_data_UART();
 float calculateAbsoluteHumidity(float temperature, float relativeHumidity);
 float calculatePineEMC(float temperature, float relativeHumidity);
 float* get_ring_buffer(int i);
+int get_max_values();
 
 #endif
