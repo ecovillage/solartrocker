@@ -16,12 +16,12 @@
 #include <Adafruit_SSD1306.h>
 #include "data.h"
 
-void draw_graph(int *graph, int b_min)
+void draw_graph(float *graph, int b_min, int b_max)
 {
   //display.clearDisplay();
   for (int i = 0; i < get_max_values() - 1; i++)
   {
-     drawPixel(13 + i, get_screen_height() - 1 - graph[i] + b_min, WHITE);
+     drawPixel(13 + i, get_screen_height() - 1 - (graph[i] / (b_max - b_min) * 60) + b_min, WHITE);
   }
   //display.display();
 }
@@ -37,14 +37,15 @@ void draw_background(char *text, int b_min, int b_max)
   set_position_cursor_lcd(0, 15);
   print_int_lcd(b_min + (b_max - b_min) / 3 * 2);
   set_position_cursor_lcd(0, 35);
+  print_int_lcd(b_min + (b_max - b_min) / 3);
   set_position_cursor_lcd(0, 55);
   print_int_lcd(b_min);
 }
 
-void plot_graph(int *graph, char *text, int b_min, int b_max)
+void plot_graph(float *graph, char *text, int b_min, int b_max)
 {
   clear_lcd();
   draw_background(text, b_min, b_max);
-  draw_graph(graph, b_min);
+  draw_graph(graph, b_min, b_max);
   display_on_lcd();
 }

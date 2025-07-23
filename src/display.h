@@ -19,5 +19,6 @@ void print_state();
 void print_time();
 void set_time_LCD(unsigned long nb);
 void show_values();
+void display();
 
 #endif

@@ -19,8 +19,7 @@
 #include "data.h"
 
 const int max_values = 100;
-float ring_buffer[max_values][4];
-int act_nb;
+float ring_buffer[4][max_values];
 unsigned long  timestamp_last_save;
 const int interval = 20; // in Sekunden
 bool	first_round = 1;
@@ -29,7 +28,6 @@ bool	first_round = 1;
 void data_setup()
 {
     timestamp_last_save = timestamp_now_s();
-	act_nb = 0;
 }
 
 float avarage_temp_bme()
@@ -40,12 +38,12 @@ float avarage_temp_bme()
 
 	sum = 0;
 	i = 0;
-	max = act_nb;
+	max = max_values - 1;
 	while (i <= max)
 	{
 		if (!first_round)
 			max = max_values - 1;
-		sum += ring_buffer[i][0];
+		sum += ring_buffer[0][i];
 		i++;
 	}
 	return (sum/(max + 1));
@@ -59,12 +57,12 @@ float avarage_humidity_bme()
 
 	sum = 0;
 	i = 0;
-	max = act_nb;
+	max = max_values - 1;
 	while (i <= max)
 	{
 		if (!first_round)
 			max = max_values - 1;
-		sum += ring_buffer[i][1];
+		sum += ring_buffer[1][i];
 		i++;
 	}
 	return (sum/(max + 1));
@@ -80,15 +78,14 @@ float delta_min_max_humidity_bme() //gibt die Differenz zwischen max H und min H
 	i = 0;
 	min_h = 100;
 	max_h = 0;
-	max = act_nb;
 	if (first_round)
 		return (100);
 	while (i <= max_values - 1)
 	{
-		if (ring_buffer[i][1] > max_h)
-			max_h = ring_buffer[i][1];
-		else if (ring_buffer[i][1] < min_h)
-			min_h = ring_buffer[i][1];
+		if (ring_buffer[1][i] > max_h)
+			max_h = ring_buffer[1][i];
+		else if (ring_buffer[1][i] < min_h)
+			min_h = ring_buffer[1][i];
 		i++;
 	}
 	return (max_h - min_h);
@@ -98,17 +95,18 @@ void collect_data()
 {
 	if (timestamp_now_s() - timestamp_last_save > interval)
 	{
-		if (act_nb == max_values)
+		for (int i = 0; i < 3; i++)
 		{
-			act_nb = 0;
-			first_round = 0;
+			for (int j = 0; j < max_values - 1; j++)
+			{
+				ring_buffer[i][j] = ring_buffer[i][j + 1];
+			}
 		}
-		ring_buffer[act_nb][0] = read_bme_temperature();
-		ring_buffer[act_nb][1] = read_bme_humidity();
-		ring_buffer[act_nb][2] = read_temp(0);
-		ring_buffer[act_nb][3] = calculateAbsoluteHumidity(ring_buffer[act_nb][0], ring_buffer[act_nb][1]);
+		ring_buffer[0][max_values - 1] = read_bme_temperature();
+		ring_buffer[1][max_values - 1] = read_bme_humidity();
+		ring_buffer[2][max_values - 1] = read_temp(0);
+		ring_buffer[3][max_values - 1] = calculateAbsoluteHumidity(ring_buffer[0][max_values - 1], ring_buffer[1][max_values - 1]);
 		send_data_UART();
-		act_nb++;
 		timestamp_last_save = timestamp_now_s();
 	}
 }
@@ -118,13 +116,13 @@ void send_data_UART()
 	Serial.print("timestamp;");
 	Serial.print(timestamp_last_save);
 	Serial.print(";t_bme;");
-	Serial.print(ring_buffer[act_nb][0],2);
+	Serial.print(ring_buffer[0][max_values - 1],2);
 	Serial.print(";h_bme;");
-	Serial.print(ring_buffer[act_nb][1],2);
+	Serial.print(ring_buffer[1][max_values - 1],2);
 	Serial.print(";t_0;");
-	Serial.print(ring_buffer[act_nb][2],2);
+	Serial.print(ring_buffer[2][max_values - 1],2);
 	Serial.print(";AbsoluteHumidity;");
-	Serial.print(ring_buffer[act_nb][3],2);	
+	Serial.print(ring_buffer[3][max_values - 1],2);	
 	Serial.print(";state_damper;");
 	Serial.print(get_damper_state());
 	Serial.print(";state_fan;");

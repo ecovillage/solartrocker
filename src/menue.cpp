@@ -39,6 +39,7 @@ void handleSelection() {
 void drawMenu() {
 	clear_lcd();
 	set_position_cursor_lcd(0,0);
+	setTextColor_display(WHITE, BLACK);
 	print_str_lcd("-- MENUE --\n\n");
 	for (int i = 0; i < menuItemCount; i++) {
 		if (i == selectedItem)
@@ -54,7 +55,7 @@ void drawMenu() {
 void show_menue()
 {
 	if (button1_pressed()) {
-  		selectedItem = ((selectedItem + 1) % menuItemCount + menuItemCount) % menuItemCount;
+  		selectedItem = (selectedItem + 1) % menuItemCount;
 	}
 	if (button2_pressed()) {
   		set_state_auto();

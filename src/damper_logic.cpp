@@ -26,12 +26,15 @@ int				last_state = 0;
 
 void state_menue()
 {
-	show_menue();
-	if (timestamp_now_s() - timestamp_state_menue > time_state_menue)
+	while (get_state() == 4)
 	{
-		set_state(last_state);
+		show_menue();
+		if (timestamp_now_s() - timestamp_state_menue > time_state_menue)
+		{
+			set_state_auto();
+		}
+		set_time_LCD(time_state_menue - (timestamp_now_s() - timestamp_state_menue));
 	}
-	set_time_LCD(time_state_menue - (timestamp_now_s() - timestamp_state_menue));
 }
 
 void set_state(int nb)
@@ -73,7 +76,7 @@ void set_state_menue()
 {
 	set_state(4);
 	set_text_state("Menue");
-	timestamp_auto = timestamp_now_s();
+	timestamp_state_menue = timestamp_now_s();
 }
 
 int get_state()

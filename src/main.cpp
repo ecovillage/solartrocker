@@ -21,15 +21,14 @@ void setup()
 	lcd_setup();
 	buttons_setup();
 	Wire.begin();
-	set_state(0);
-	show_logo();
+	set_state_auto();
 }
 
 void loop()
 {
 	if (button1_pressed())
 	{
-		set_state(4);
+		set_state_menue();
 	}
 	if (get_state() == 0)
 		state_auto();
@@ -40,12 +39,9 @@ void loop()
 	else if (get_state() == 3)
 		state_RF_const();
 	else if (get_state() == 4)
-	{
 		state_menue();
-		return ;
-	}
 	save_max_temp();
-	show_values();
+	display();
 	collect_data();
-	delay(100);
+	delay(300);
 }

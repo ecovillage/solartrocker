@@ -14,7 +14,7 @@
 char text_state[12];
 int time_LCD;
 unsigned long	timestamp_display = 0;
-const int		time_display = 3; // Sekunden
+const int		time_display = 5; // Sekunden
 int				modus_display = 0;
 
 void display()
@@ -24,16 +24,18 @@ void display()
 	if (modus_display == 1)
 		show_values();
 	if (modus_display == 2)
-		plot_graph((int *)get_ring_buffer(1), "F", 20, 80);
+		plot_graph(get_ring_buffer(1), "rF", 20, 80);
 	if (modus_display == 3)
-		plot_graph((int *)get_ring_buffer(0), "T", 15, 55);
+		plot_graph(get_ring_buffer(0), "T", 15, 60);
+	if (modus_display == 4)
+		plot_graph(get_ring_buffer(2), "aF", 0, 30);
 	if (timestamp_now_s() - timestamp_display > time_display)
 	{
 		modus_display++;
-		if (modus_display > 3)
+		if (modus_display > 4)
 			modus_display = 1;
+		timestamp_display = timestamp_now_s();
 	}
-	
 }
 
 void show_values()
