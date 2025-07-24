@@ -183,18 +183,3 @@ void state_RF_const()
 		set_state_auto();
 	set_time_LCD(timestamp_now_s() - timestamp_state_RF_const);
 }
-
-// void check_fan_neccessary()
-// {
-// 	float	delta;
-
-// 	delta = delta_min_max_humidity_bme();
-// 	if (delta < min_percent_change_hydr)
-// 	{	
-// 		fan_off();
-// 		set_text_state("RF zu konst");
-// 	}
-// 	else
-// 		fan_on();
-// 		clear_text_state();
-// }
