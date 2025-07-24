@@ -21,7 +21,7 @@ void draw_graph(float *graph, int b_min, int b_max)
   //display.clearDisplay();
   for (int i = 0; i < get_max_values() - 1; i++)
   {
-     drawPixel(13 + i, get_screen_height() - 1 - (graph[i] / (b_max - b_min) * 60) + b_min, WHITE);
+     drawPixel(13 + i, get_screen_height() - 1 - ((graph[i] - b_min) / (b_max - b_min) * 60), WHITE);
   }
   //display.display();
 }
