@@ -28,7 +28,7 @@ void display()
 	if (modus_display == 3)
 		plot_graph(get_ring_buffer(0), "T", 15, 60);
 	if (modus_display == 4)
-		plot_graph(get_ring_buffer(2), "aF", 0, 30); 
+		plot_graph(get_ring_buffer(2), "aF", 0, 60); 
 	if (timestamp_now_s() - timestamp_display > time_display)
 	{
 		modus_display++;
