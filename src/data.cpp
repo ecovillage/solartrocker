@@ -138,7 +138,7 @@ float calculateAbsoluteHumidity(float temperature, float relativeHumidity) //Cha
 	float absoluteHumidity;
 
     saturationVaporPressure = 6.112f * expf((17.67f * temperature) / (temperature + 243.5f)); // Sättigungsdampfdruck (Magnus-Formel)
-    absoluteHumidity = (saturationVaporPressure * relativeHumidity * 2.1674f) / (273.15f + temperature);  // Absolute Feuchte (in g/m³)
+    absoluteHumidity = (saturationVaporPressure * (relativeHumidity / 100.0f) * 2.1674f) / (273.15f + temperature);  // Absolute Feuchte (in g/m³)
     
     return (absoluteHumidity);
 }
