@@ -12,7 +12,7 @@
 #include "data.h"
 
 char text_state[12];
-int time_LCD;
+unsigned long time_LCD;
 unsigned long	timestamp_display = 0;
 const int		time_display = 5; // Sekunden
 int				modus_display = 0;
@@ -73,14 +73,29 @@ void set_text_state(char *text)
 
 void set_time_LCD(unsigned long nb)
 {
-	time_LCD = (int)nb;
+	time_LCD = nb;
 }
 
 void print_time()
 {
-	print_str_lcd("Dauer:      ");
-	print_int_lcd(time_LCD);
-	print_str_lcd(" s\n");
+    int hours = time_LCD / 3600;
+    int minutes = (time_LCD % 3600) / 60;
+    int seconds = time_LCD % 60;
+
+    print_str_lcd("Dauer: ");
+    if (hours < 10)
+		print_char_lcd('0');
+    print_int_lcd(hours);
+    print_char_lcd(':');
+    if (minutes < 10)
+		print_char_lcd('0');
+    print_int_lcd(minutes);
+    print_char_lcd(':');
+    if (seconds < 10)
+		print_char_lcd('0');
+    print_int_lcd(seconds);
+
+    print_str_lcd("\n");
 }
 
 void print_state()
