@@ -28,47 +28,20 @@ bool	first_round = 1;
 void data_setup()
 {
     timestamp_last_save = timestamp_now_s();
+	ring_buffer[0][max_values - 1] = -1;
 }
 
-float avarage_temp_bme()
+float avarage_ringbuffer(int value)
 {
 	float	sum;
-	int		i;
-	int		max;
 
 	sum = 0;
-	i = 0;
-	max = max_values - 1;
-	while (i <= max)
-	{
-		if (!first_round)
-			max = max_values - 1;
-		sum += ring_buffer[0][i];
-		i++;
-	}
-	return (sum/(max + 1));
+	for (int i = 0; i <= max_values - 1; i++)
+		sum += ring_buffer[value][i];
+	return (sum/(max_values));
 }
 
-float avarage_humidity_bme()
-{
-	float	sum;
-	int		i;
-	int		max;
-
-	sum = 0;
-	i = 0;
-	max = max_values - 1;
-	while (i <= max)
-	{
-		if (!first_round)
-			max = max_values - 1;
-		sum += ring_buffer[1][i];
-		i++;
-	}
-	return (sum/(max + 1));
-}
-
-float delta_min_max_humidity_bme() //gibt die Differenz zwischen max H und min H aus dem Ringbuffer zurück, außer bei ersten Füllen des Ringbuffers
+float delta_min_max_abs_humidity() //gibt die Differenz zwischen max H und min H aus dem Ringbuffer zurück, außer bei ersten Füllen des Ringbuffers
 {
 	float	min_h;
 	float	max_h;
@@ -82,10 +55,10 @@ float delta_min_max_humidity_bme() //gibt die Differenz zwischen max H und min H
 		return (100);
 	while (i <= max_values - 1)
 	{
-		if (ring_buffer[1][i] > max_h)
+		if (ring_buffer[3][i] > max_h)
 			max_h = ring_buffer[1][i];
-		else if (ring_buffer[1][i] < min_h)
-			min_h = ring_buffer[1][i];
+		else if (ring_buffer[3][i] < min_h)
+			min_h = ring_buffer[3][i];
 		i++;
 	}
 	return (max_h - min_h);
@@ -95,12 +68,12 @@ void collect_data()
 {
 	if (timestamp_now_s() - timestamp_last_save > interval)
 	{
+		if (ring_buffer[0][0] != -1)
+			first_round = 0;
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < max_values - 1; j++)
-			{
 				ring_buffer[i][j] = ring_buffer[i][j + 1];
-			}
 		}
 		ring_buffer[0][max_values - 1] = read_bme_temperature();
 		ring_buffer[1][max_values - 1] = read_bme_humidity();

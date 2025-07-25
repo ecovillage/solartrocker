@@ -82,7 +82,7 @@ void print_time()
     int minutes = (time_LCD % 3600) / 60;
     int seconds = time_LCD % 60;
 
-    print_str_lcd("Dauer: ");
+    print_str_lcd("Dauer:      ");
     if (hours < 10)
 		print_char_lcd('0');
     print_int_lcd(hours);

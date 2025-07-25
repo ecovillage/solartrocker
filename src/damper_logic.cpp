@@ -15,7 +15,7 @@ const int		time_dehydrating = 2 * 60; // Sekunden
 unsigned long	timestamp_dehydrating = 0;
 const int		time_heating = 5 * 60; // Sekunden
 unsigned long	timestamp_heating = 0;
-const float		min_percent_change_hydr = 5;
+const float		min_change_hydr = 0.5;
 float			temp_start_heating;
 unsigned long	timestamp_auto = 0;
 unsigned long	timestamp_state_menue = 0;
@@ -161,10 +161,7 @@ void state_heating()
 
 bool is_hydrating_const()
 {
-	float	delta;
-
-	delta = delta_min_max_humidity_bme();
-	if (delta < min_percent_change_hydr)
+	if (delta_min_max_abs_humidity() < min_change_hydr)
 		return (true);
 	else
 		return (false);
