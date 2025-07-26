@@ -18,7 +18,7 @@
 #include "fan.h"
 #include "data.h"
 
-const int max_values = 100;
+const int max_values = 110;
 float ring_buffer[4][max_values];
 unsigned long  timestamp_last_save;
 const int interval = 20; // in Sekunden
@@ -39,6 +39,34 @@ float avarage_ringbuffer(int value)
 	for (int i = 0; i <= max_values - 1; i++)
 		sum += ring_buffer[value][i];
 	return (sum/(max_values));
+}
+
+float min_array(float *arr, const int size) //gibt die Differenz zwischen max H und min H aus dem Ringbuffer zurück, außer bei ersten Füllen des Ringbuffers
+{
+	float	arr_min;
+	if (!arr)
+		return (0);
+	arr_min = arr[0];
+	for (int i = 0; i < size; i++)
+	{
+		if (arr[i] < arr_min)
+			arr_min = arr[i];
+	}
+	return (arr_min);
+}
+
+float max_array(float *arr, const int size) //gibt die Differenz zwischen max H und min H aus dem Ringbuffer zurück, außer bei ersten Füllen des Ringbuffers
+{
+	float	arr_max;
+	if (!arr)
+		return (0);
+	arr_max = arr[0];
+	for (int i = 0; i < size; i++)
+	{
+		if (arr[i] > arr_max)
+			arr_max = arr[i];
+	}
+	return (arr_max);
 }
 
 float delta_min_max_abs_humidity() //gibt die Differenz zwischen max H und min H aus dem Ringbuffer zurück, außer bei ersten Füllen des Ringbuffers
@@ -89,13 +117,13 @@ void send_data_UART()
 	Serial.print("timestamp;");
 	Serial.print(timestamp_last_save);
 	Serial.print(";t_bme;");
-	Serial.print(ring_buffer[0][max_values - 1],2);
+	Serial.print(ring_buffer[0][max_values - 1], 2);
 	Serial.print(";h_bme;");
-	Serial.print(ring_buffer[1][max_values - 1],2);
+	Serial.print(ring_buffer[1][max_values - 1], 2);
 	Serial.print(";t_0;");
-	Serial.print(ring_buffer[2][max_values - 1],2);
+	Serial.print(ring_buffer[2][max_values - 1], 2);
 	Serial.print(";AbsoluteHumidity;");
-	Serial.print(ring_buffer[3][max_values - 1],2);	
+	Serial.print(ring_buffer[3][max_values - 1], 2);	
 	Serial.print(";state_damper;");
 	Serial.print(get_damper_state());
 	Serial.print(";state_fan;");

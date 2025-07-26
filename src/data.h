@@ -23,5 +23,7 @@ float calculateAbsoluteHumidity(float temperature, float relativeHumidity);
 float calculatePineEMC(float temperature, float relativeHumidity);
 float* get_ring_buffer(int i);
 int get_max_values();
+float min_array(float *arr, const int size);
+float max_array(float *arr, const int size);
 
 #endif

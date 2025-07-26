@@ -43,7 +43,7 @@ void drawMenu() {
 	print_str_lcd("-- MENUE --\n\n");
 	for (int i = 0; i < menuItemCount; i++) {
 		if (i == selectedItem)
-			setTextColor_display(BLACK, WHITE);
+			setTextColor_display(SSD1306_INVERSE, SSD1306_INVERSE);
 		else
 			setTextColor_display(WHITE, BLACK);
 		print_str_lcd(menuItems[i].label);

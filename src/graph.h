@@ -13,8 +13,8 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-void draw_graph(float *graph, int b_min, int b_max);
+void draw_graph(float *graph, float b_min, float b_max);
 void draw_background(char *text, int b_min, int b_max);
-void plot_graph(float *graph, char *text, int b_min, int b_max);
+void plot_graph(float *graph, char *text);
 
 #endif

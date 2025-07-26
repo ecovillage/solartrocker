@@ -24,6 +24,7 @@ void set_position_cursor_lcd(int row, int column);
 void display_on_lcd();
 void show_logo();
 void drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
+void drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
 void drawPixel(int16_t x, int16_t y, uint16_t color);
 int get_screen_height();
 int get_screen_width();

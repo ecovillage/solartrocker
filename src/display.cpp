@@ -10,6 +10,8 @@
 #include "damper_logic.h"
 #include "graph.h"
 #include "data.h"
+#include "sht3x.h"
+#include <Adafruit_SSD1306.h>
 
 char text_state[12];
 unsigned long time_LCD;
@@ -22,34 +24,73 @@ void display()
 	if (modus_display == 0)
 		show_logo();
 	if (modus_display == 1)
-		show_values();
+		show_values_1();
 	if (modus_display == 2)
-		plot_graph(get_ring_buffer(1), "rF", 20, 80);
+		show_values_1();
 	if (modus_display == 3)
-		plot_graph(get_ring_buffer(0), "T", 15, 60);
+		plot_graph(get_ring_buffer(1), "rF (%)");
 	if (modus_display == 4)
-		plot_graph(get_ring_buffer(2), "aF", 0, 60); 
+		plot_graph(get_ring_buffer(0), "T (°C)");
+	if (modus_display == 5)
+		plot_graph(get_ring_buffer(2), "aF (g/m3)"); 
 	if (timestamp_now_s() - timestamp_display > time_display)
 	{
 		modus_display++;
-		if (modus_display > 4)
+		if (modus_display > 5)
 			modus_display = 1;
 		timestamp_display = timestamp_now_s();
 	}
 }
 
-void show_values()
+void show_values_1()
 {
 	clear_lcd();
 	set_position_cursor_lcd(0,0);
+	setTextColor_display(WHITE, BLACK);
 	print_state();
 	print_time();
-	print_values_BME280();
-	print_values_DS18B20();
 	print_max_temp();
 	print_state_damper();
 	print_state_fan();
-	//print_values_buttons();
+	display_on_lcd();
+}
+
+void show_values_2()
+{
+	clear_lcd();
+	set_position_cursor_lcd(0,0);
+	setTextColor_display(WHITE, BLACK);
+
+	print_str_lcd("T(innen):   "); 
+    print_float_lcd(read_bme_temperature());
+    print_str_lcd(" °C\n");
+	
+	print_str_lcd("T(aussen):  "); 
+    print_float_lcd(read_sht3x_aussen_temperature());
+    print_str_lcd(" °C\n");
+	
+	print_str_lcd("T(Holz):    "); 
+    print_float_lcd(read_sht3x_holz_temperature());
+    print_str_lcd(" °C\n");
+	
+	print_str_lcd("F(innen):   "); 
+    print_float_lcd(read_bme_humidity());
+    print_str_lcd(" %RH\n");
+	
+	print_str_lcd("F(aussen):  "); 
+    print_float_lcd(read_sht3x_aussen_humidity());
+    print_str_lcd(" %RH\n");
+	
+	print_str_lcd("F(Holz):    "); 
+    print_float_lcd(read_sht3x_holz_humidity());
+    print_str_lcd(" %RH\n");
+	
+	print_str_lcd("F(abs):     "); 
+    print_float_lcd(calculateAbsoluteHumidity(read_bme_temperature(), read_bme_humidity()));
+    print_str_lcd(" g/m3\n");
+
+
+
 	display_on_lcd();
 }
 
@@ -103,4 +144,11 @@ void print_state()
 	print_str_lcd("Status:     ");
 	print_str_lcd(text_state);
 	print_str_lcd("\n");
+}
+
+void print_abs_humidity()
+{
+	print_str_lcd("F(abs):     "); 
+    print_float_lcd(calculateAbsoluteHumidity(read_bme_temperature(), read_bme_humidity()));
+    print_str_lcd(" g/m3\n");
 }

@@ -48,11 +48,9 @@ void print_values_BME280()
 {
     print_str_lcd("T(innen):   "); 
     print_float_lcd(read_bme_temperature());
-    print_str_lcd(" ");
-	print_char_lcd((char)247);                        // degree symbol
-    print_str_lcd("C\n");
+    print_str_lcd(" °C\n");
 	
-	print_str_lcd("H(innen):   "); 
+	print_str_lcd("F(innen):   "); 
     print_float_lcd(read_bme_humidity());
     print_str_lcd(" %RH\n");
 }

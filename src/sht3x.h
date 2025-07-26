@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fan.h                                              :+:      :+:    :+:   */
+/*   sht3x.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jweingar <jweingar@student.42wolf>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/03 15:03:37 by jweingar          #+#    #+#             */
-/*   Updated: 2024/07/03 15:03:37 by jweingar         ###   ########.fr       */
+/*   Created: 2025/07/26 13:07:47 by jweingar          #+#    #+#             */
+/*   Updated: 2025/07/26 13:07:47 by jweingar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef SHT3X_H
+#define SHT3X_H
 
-void clear_text_state();
-void set_text_state(char *text);
-void print_state();
-void print_time();
-void set_time_LCD(unsigned long nb);
-void show_values_1();
-void show_values_2();
-void display();
-void print_abs_humidity();
+#include <Arduino.h>
 
-#endif
+void SHT3X_setup();
+
+float read_sht3x_temperature(uint8_t address);
+float read_sht3x_humidity(uint8_t address);
+
+float read_sht3x_aussen_temperature();
+float read_sht3x_aussen_humidity();
+
+float read_sht3x_holz_temperature();
+float read_sht3x_holz_humidity();
+
+void print_values_SHT3X();
+
+#endif // SHT3X_H

@@ -10,6 +10,7 @@
 #include "data.h"
 #include "damper_logic.h"
 #include <Wire.h>
+#include "sht3x.h"
 
 void setup()
 {
@@ -17,6 +18,7 @@ void setup()
 	Serial.println("Starte Solartrockner!");
 	fan_setup();
 	BME280_setup();
+	SHT3X_setup();
 	damper_setup();
 	lcd_setup();
 	buttons_setup();
