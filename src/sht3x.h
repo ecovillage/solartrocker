@@ -20,11 +20,11 @@ void SHT3X_setup();
 float read_sht3x_temperature(uint8_t address);
 float read_sht3x_humidity(uint8_t address);
 
-float read_sht3x_aussen_temperature();
-float read_sht3x_aussen_humidity();
+float read_aussen_temperature();
+float read_aussen_humidity();
 
-float read_sht3x_holz_temperature();
-float read_sht3x_holz_humidity();
+float read_holz_temperature();
+float read_holz_humidity();
 
 void print_values_SHT3X();
 

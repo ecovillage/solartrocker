@@ -24,39 +24,23 @@ void BME280_setup()
 	bme.begin(0x76);
 }
 
-float read_bme_temperature()
+float read_innen_temperature()
 {
 	return (bme.readTemperature()); // reads temperature in Celsius
 }
 
-float read_bme_humidity()
+float read_innen_humidity()
 {
 	return (bme.readHumidity()); // reads absolute humidity
-}
-
-float read_bme_pressure()
-{
-	return (bme.readPressure()); // reads pressure in hPa (hectoPascal = millibar)
-}
-
-float read_bme_altitude()
-{
-	return (bme.readAltitude(SEALEVELPRESSURE_HPA)); // estimates altitude in meters based on the pressure at the sea level.
 }
 
 void print_values_BME280()
 {
     print_str_lcd("T(innen):   "); 
-    print_float_lcd(read_bme_temperature());
+    print_float_lcd(read_innen_temperature());
     print_str_lcd(" °C\n");
 	
 	print_str_lcd("F(innen):   "); 
-    print_float_lcd(read_bme_humidity());
+    print_float_lcd(read_innen_humidity());
     print_str_lcd(" %RH\n");
 }
-
-
-//bme.readTemperature(); // reads temperature in Celsius;
-//bme.readHumidity(); // reads absolute humidity;
-//bme.readPressure(); // reads pressure in hPa (hectoPascal = millibar);
-//bme.readAltitude(SEALEVELPRESSURE_HPA); // estimates altitude in meters based on the pressure at the sea level.

@@ -26,13 +26,13 @@ void display()
 	if (modus_display == 1)
 		show_values_1();
 	if (modus_display == 2)
-		show_values_1();
+		show_values_2();
 	if (modus_display == 3)
-		plot_graph(get_ring_buffer(1), "rF (%)");
+		plot_graph(get_ring_buffer(T_innen), "T (°C)");
 	if (modus_display == 4)
-		plot_graph(get_ring_buffer(0), "T (°C)");
+		plot_graph(get_ring_buffer(F_innen), "rF (%)");
 	if (modus_display == 5)
-		plot_graph(get_ring_buffer(2), "aF (g/m3)"); 
+		plot_graph(get_ring_buffer(F_abs_innen), "aF (g/m3)"); 
 	if (timestamp_now_s() - timestamp_display > time_display)
 	{
 		modus_display++;
@@ -62,34 +62,32 @@ void show_values_2()
 	setTextColor_display(WHITE, BLACK);
 
 	print_str_lcd("T(innen):   "); 
-    print_float_lcd(read_bme_temperature());
+    print_float_lcd(read_innen_temperature());
     print_str_lcd(" °C\n");
 	
 	print_str_lcd("T(aussen):  "); 
-    print_float_lcd(read_sht3x_aussen_temperature());
+    print_float_lcd(read_aussen_temperature());
     print_str_lcd(" °C\n");
 	
 	print_str_lcd("T(Holz):    "); 
-    print_float_lcd(read_sht3x_holz_temperature());
+    print_float_lcd(read_holz_temperature());
     print_str_lcd(" °C\n");
 	
 	print_str_lcd("F(innen):   "); 
-    print_float_lcd(read_bme_humidity());
+    print_float_lcd(read_innen_humidity());
     print_str_lcd(" %RH\n");
 	
 	print_str_lcd("F(aussen):  "); 
-    print_float_lcd(read_sht3x_aussen_humidity());
+    print_float_lcd(read_aussen_humidity());
     print_str_lcd(" %RH\n");
 	
 	print_str_lcd("F(Holz):    "); 
-    print_float_lcd(read_sht3x_holz_humidity());
+    print_float_lcd(read_holz_humidity());
     print_str_lcd(" %RH\n");
 	
 	print_str_lcd("F(abs):     "); 
-    print_float_lcd(calculateAbsoluteHumidity(read_bme_temperature(), read_bme_humidity()));
+    print_float_lcd(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()));
     print_str_lcd(" g/m3\n");
-
-
 
 	display_on_lcd();
 }
@@ -149,6 +147,6 @@ void print_state()
 void print_abs_humidity()
 {
 	print_str_lcd("F(abs):     "); 
-    print_float_lcd(calculateAbsoluteHumidity(read_bme_temperature(), read_bme_humidity()));
+    print_float_lcd(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()));
     print_str_lcd(" g/m3\n");
 }

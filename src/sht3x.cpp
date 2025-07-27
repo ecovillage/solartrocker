@@ -61,22 +61,22 @@ float read_sht3x_humidity(uint8_t address)
     return (100 * (h_raw / 65535.0));
 }
 
-float read_sht3x_aussen_temperature()
+float read_aussen_temperature()
 {
     return (read_sht3x_temperature(SHT3X_AUSSEN));
 }
 
-float read_sht3x_aussen_humidity()
+float read_aussen_humidity()
 {
     return (read_sht3x_humidity(SHT3X_AUSSEN));
 }
 
-float read_sht3x_holz_temperature()
+float read_holz_temperature()
 {
     return (read_sht3x_temperature(SHT3X_HOLZ));
 }
 
-float read_sht3x_holz_humidity()
+float read_holz_humidity()
 {
     return (read_sht3x_humidity(SHT3X_HOLZ));
 }
@@ -84,18 +84,18 @@ float read_sht3x_holz_humidity()
 void print_values_SHT3X()
 {
     print_str_lcd("T(aussen):  "); 
-    print_float_lcd(read_sht3x_aussen_temperature());
+    print_float_lcd(read_aussen_temperature());
     print_str_lcd(" °C\n");
 	
 	print_str_lcd("F(aussen):  "); 
-    print_float_lcd(read_sht3x_aussen_humidity());
+    print_float_lcd(read_aussen_humidity());
     print_str_lcd(" %RH\n");
 
 	print_str_lcd("T(Holz):    "); 
-    print_float_lcd(read_sht3x_holz_temperature());
+    print_float_lcd(read_holz_temperature());
     print_str_lcd(" °C\n");
 	
 	print_str_lcd("F(Holz):    "); 
-    print_float_lcd(read_sht3x_holz_humidity());
+    print_float_lcd(read_holz_humidity());
     print_str_lcd(" %RH\n");
 }

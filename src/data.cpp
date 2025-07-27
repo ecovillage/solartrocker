@@ -17,18 +17,27 @@
 #include "damper.h"
 #include "fan.h"
 #include "data.h"
+#include "storage.h"
+#include "sht3x.h"
 
 const int max_values = 110;
-float ring_buffer[4][max_values];
+float ring_buffer[NUM_VALUES][max_values];
 unsigned long  timestamp_last_save;
 const int interval = 20; // in Sekunden
-bool	first_round = 1;
+bool	first_round = true;
+
+
 
 
 void data_setup()
 {
     timestamp_last_save = timestamp_now_s();
-	ring_buffer[0][max_values - 1] = -1;
+	ring_buffer[T_innen][max_values - 1] = -1;
+}
+
+bool is_first_round()
+{
+	return (first_round);
 }
 
 float avarage_ringbuffer(int value)
@@ -73,21 +82,16 @@ float delta_min_max_abs_humidity() //gibt die Differenz zwischen max H und min H
 {
 	float	min_h;
 	float	max_h;
-	int		i;
 	int		max;
 
-	i = 0;
-	min_h = 100;
-	max_h = 0;
-	if (first_round)
-		return (100);
-	while (i <= max_values - 1)
+	min_h = ring_buffer[F_abs_innen][0];
+	max_h = ring_buffer[F_abs_innen][0];
+	for (int i = 0; i <= max_values - 1; i++)
 	{
-		if (ring_buffer[3][i] > max_h)
-			max_h = ring_buffer[1][i];
-		else if (ring_buffer[3][i] < min_h)
-			min_h = ring_buffer[3][i];
-		i++;
+		if (ring_buffer[F_abs_innen][i] > max_h)
+			max_h = ring_buffer[F_abs_innen][i];
+		else if (ring_buffer[F_abs_innen][i] < min_h)
+			min_h = ring_buffer[F_abs_innen][i];
 	}
 	return (max_h - min_h);
 }
@@ -97,16 +101,15 @@ void collect_data()
 	if (timestamp_now_s() - timestamp_last_save > interval)
 	{
 		if (ring_buffer[0][0] != -1)
-			first_round = 0;
-		for (int i = 0; i < 3; i++)
+			first_round = false;
+		for (int i = 0; i < NUM_VALUES; i++)
 		{
 			for (int j = 0; j < max_values - 1; j++)
 				ring_buffer[i][j] = ring_buffer[i][j + 1];
 		}
-		ring_buffer[0][max_values - 1] = read_bme_temperature();
-		ring_buffer[1][max_values - 1] = read_bme_humidity();
-		ring_buffer[2][max_values - 1] = read_temp(0);
-		ring_buffer[3][max_values - 1] = calculateAbsoluteHumidity(ring_buffer[0][max_values - 1], ring_buffer[1][max_values - 1]);
+		ring_buffer[T_innen][max_values - 1] = read_innen_temperature();
+		ring_buffer[F_innen][max_values - 1] = read_innen_humidity();
+		ring_buffer[F_abs_innen][max_values - 1] = calculateAbsoluteHumidity(ring_buffer[T_innen][max_values - 1], ring_buffer[F_innen][max_values - 1]);
 		send_data_UART();
 		timestamp_last_save = timestamp_now_s();
 	}
@@ -114,16 +117,24 @@ void collect_data()
 
 void send_data_UART()
 {
-	Serial.print("timestamp;");
+	Serial.print("zyklus;");
+	Serial.print(get_zyklus());
+	Serial.print(";timestamp;");
 	Serial.print(timestamp_last_save);
-	Serial.print(";t_bme;");
-	Serial.print(ring_buffer[0][max_values - 1], 2);
-	Serial.print(";h_bme;");
-	Serial.print(ring_buffer[1][max_values - 1], 2);
-	Serial.print(";t_0;");
-	Serial.print(ring_buffer[2][max_values - 1], 2);
-	Serial.print(";AbsoluteHumidity;");
-	Serial.print(ring_buffer[3][max_values - 1], 2);	
+	Serial.print(";T_innen;");
+	Serial.print(read_innen_temperature(), 1);
+	Serial.print(";F_innen;");
+	Serial.print(read_innen_humidity(), 1);
+	Serial.print(";T_aussen;");
+	Serial.print(read_aussen_temperature(), 1);
+	Serial.print(";F_aussen;");
+	Serial.print(read_aussen_humidity(), 1);
+	Serial.print(";T_Holz;");
+	Serial.print(read_holz_temperature(), 1);
+	Serial.print(";F_Holz;");
+	Serial.print(read_holz_humidity(), 1);
+	Serial.print(";F_abs_innen;");
+	Serial.print(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()), 1);	
 	Serial.print(";state_damper;");
 	Serial.print(get_damper_state());
 	Serial.print(";state_fan;");
@@ -133,14 +144,27 @@ void send_data_UART()
 	Serial.println(";");
 }
 
+float saturation_vapor_pressure(float T) {
+    return 6.112f * expf((17.62f * T) / (243.12f + T));
+}
+
+// Berechnet die neue relative Feuchte nach Temperaturänderung
+float humidity_changed_temperature(float t_begin, float h_begin, float t_end) {
+    // Dampfdruck bleibt gleich (konstante absolute Feuchte)
+    float e_s_begin = saturation_vapor_pressure(t_begin);
+    float e = h_begin / 100.0f * e_s_begin;
+
+    float e_s_end = saturation_vapor_pressure(t_end);
+    float h_end = (e / e_s_end) * 100.0f;
+
+    return h_end;
+}
+
 float calculateAbsoluteHumidity(float temperature, float relativeHumidity) //ChatGPT
 {
-	float saturationVaporPressure;
 	float absoluteHumidity;
 
-    saturationVaporPressure = 6.112f * expf((17.67f * temperature) / (temperature + 243.5f)); // Sättigungsdampfdruck (Magnus-Formel)
-    absoluteHumidity = (saturationVaporPressure * (relativeHumidity / 100.0f) * 2.1674f) / (273.15f + temperature);  // Absolute Feuchte (in g/m³)
-    
+    absoluteHumidity = (saturation_vapor_pressure(temperature) * (relativeHumidity / 100.0f) * 2.1674f) / (273.15f + temperature);  // Absolute Feuchte (in g/m³)
     return (absoluteHumidity);
 }
 

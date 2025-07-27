@@ -18,11 +18,17 @@
 
 int modus_adress = 0;
 int max_temp_adress = modus_adress + sizeof(int);
+int zyklus_adress = max_temp_adress + sizeof(int);
 
 // Funktion zum Speichern eines Wertes im EEPROM
 void storeValueInEEPROM(int address, int value)
 {
 	EEPROM.put(address, value);  // Speichert den Wert im EEPROM an der angegebenen Adresse
+}
+
+void updateValueInEEPROM(int address, int value)
+{
+	EEPROM.update(address, value);  // Speichert den Wert im EEPROM an der angegebenen Adresse
 }
 
 // Funktion zum Lesen des Wertes aus dem EEPROM
@@ -59,7 +65,7 @@ void save_max_temp()
 	int temperatur;
 
 	limit = read_max_temp_EEPROM();
-	temperatur = (int)read_bme_temperature();
+	temperatur = (int)read_innen_temperature();
 	if (temperatur > limit + 1)
 		set_max_temp_EEPROM(temperatur);
 }
@@ -89,4 +95,14 @@ void print_max_temp()
 	print_str_lcd(" ");
 	print_char_lcd((char)247);                        // degree symbol
     print_str_lcd("C\n");
+}
+
+void increase_zyklus()
+{
+	storeValueInEEPROM(zyklus_adress, readValueFromEEPROM(zyklus_adress) + 1);
+}
+
+int get_zyklus()
+{
+	return (readValueFromEEPROM(zyklus_adress));
 }

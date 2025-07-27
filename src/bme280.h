@@ -3,8 +3,8 @@
 
 void BME280_setup();
 
-float read_bme_temperature();
-float read_bme_humidity();
+float read_innen_temperature();
+float read_innen_humidity();
 float read_bme_pressure();
 float read_bme_altitude();
 void print_values_BME280();

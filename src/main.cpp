@@ -14,8 +14,8 @@
 
 void setup()
 {
+	increase_zyklus();
 	Serial.begin(9600);
-	Serial.println("Starte Solartrockner!");
 	fan_setup();
 	BME280_setup();
 	SHT3X_setup();

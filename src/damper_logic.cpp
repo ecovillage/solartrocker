@@ -10,6 +10,7 @@
 #include "storage.h"
 #include "ds18B20.h"
 #include "menue.h"
+#include "sht3x.h"
 
 const int		time_dehydrating = 2 * 60; // Sekunden
 unsigned long	timestamp_dehydrating = 0;
@@ -62,7 +63,7 @@ void set_state_heizen()
 	set_state(2);
 	set_text_state("Heizen");
 	timestamp_heating = timestamp_now_s();
-	temp_start_heating = read_bme_temperature();
+	temp_start_heating = read_innen_temperature();
 }
 
 void set_state_RF_const()
@@ -114,12 +115,12 @@ unsigned long timestamp_now_s(void)
 
 void state_auto()
 {
-	if (air_too_moist(read_bme_humidity(),read_bme_temperature()))
+	if (air_too_moist(read_innen_humidity(),read_innen_temperature()) && read_innen_humidity() > humidity_changed_temperature(read_aussen_temperature(), read_aussen_humidity(), read_innen_temperature()))
 	{
 		set_state_lueften();
 		return ;
 	}
-	else if (is_hydrating_const())
+	else if (is_first_round() == false && is_hydrating_const())
 	{
 		set_state_RF_const();
 		return ;
@@ -147,10 +148,10 @@ void state_heating()
 {
 	close_damper();
 	fan_on();
-	if (read_bme_temperature() - temp_start_heating > 1)
+	if (read_innen_temperature() - temp_start_heating > 1)
 	{
 		timestamp_heating = timestamp_now_s();
-		temp_start_heating = read_bme_temperature();
+		temp_start_heating = read_innen_temperature();
 	}
 	if (timestamp_now_s() - timestamp_heating > time_heating)
 	{
@@ -161,17 +162,14 @@ void state_heating()
 
 bool is_hydrating_const()
 {
-	if (delta_min_max_abs_humidity() < min_change_hydr)
-		return (true);
-	else
-		return (false);
+	return (delta_min_max_abs_humidity() < min_change_hydr);
 }
 
 void state_RF_const()
 {
 	if (is_hydrating_const())
 	{
-		if (read_bme_temperature() > read_temp(0) + 5)
+		if (read_innen_temperature() > read_temp(0) + 5)
 			set_state_lueften();
 		else
 			fan_off();
