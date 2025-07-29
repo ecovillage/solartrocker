@@ -28,7 +28,7 @@ void display()
 	if (modus_display == 2)
 		show_values_2();
 	if (modus_display == 3)
-		plot_graph(get_ring_buffer(T_innen), "T (°C)");
+		plot_graph(get_ring_buffer(T_innen), "T ('C)");
 	if (modus_display == 4)
 		plot_graph(get_ring_buffer(F_innen), "rF (%)");
 	if (modus_display == 5)

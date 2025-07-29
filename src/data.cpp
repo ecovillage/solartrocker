@@ -134,7 +134,7 @@ void send_data_UART()
 	Serial.print(";F_Holz;");
 	Serial.print(read_holz_humidity(), 1);
 	Serial.print(";F_abs_innen;");
-	Serial.print(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()), 1);	
+	Serial.print(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()), 3);	
 	Serial.print(";state_damper;");
 	Serial.print(get_damper_state());
 	Serial.print(";state_fan;");
@@ -144,20 +144,22 @@ void send_data_UART()
 	Serial.println(";");
 }
 
-float saturation_vapor_pressure(float T) {
-    return 6.112f * expf((17.62f * T) / (243.12f + T));
-}
 
 // Berechnet die neue relative Feuchte nach Temperaturänderung
 float humidity_changed_temperature(float t_begin, float h_begin, float t_end) {
-    // Dampfdruck bleibt gleich (konstante absolute Feuchte)
+	// Dampfdruck bleibt gleich (konstante absolute Feuchte)
     float e_s_begin = saturation_vapor_pressure(t_begin);
     float e = h_begin / 100.0f * e_s_begin;
-
+	
     float e_s_end = saturation_vapor_pressure(t_end);
     float h_end = (e / e_s_end) * 100.0f;
-
+	
     return h_end;
+}
+
+float saturation_vapor_pressure(float temperature)
+{
+	return (6.112f * expf((17.67f * temperature) / (temperature + 243.5f)));
 }
 
 float calculateAbsoluteHumidity(float temperature, float relativeHumidity) //ChatGPT
@@ -165,7 +167,7 @@ float calculateAbsoluteHumidity(float temperature, float relativeHumidity) //Cha
 	float absoluteHumidity;
 
     absoluteHumidity = (saturation_vapor_pressure(temperature) * (relativeHumidity / 100.0f) * 2.1674f) / (273.15f + temperature);  // Absolute Feuchte (in g/m³)
-    return (absoluteHumidity);
+    return (absoluteHumidity * 100);
 }
 
 float calculatePineEMC(float temperature, float relativeHumidity) //ChatGPT
@@ -184,7 +186,7 @@ float calculatePineEMC(float temperature, float relativeHumidity) //ChatGPT
     float term3 = (1.0f + K1 * K * h + K1 * K2 * K * K * h * h);
     float EMC = (1800.0f / 18.0f) * (term1 + (term2 / term3));
 
-    return EMC;
+    return (EMC);
 }
 
 float* get_ring_buffer(int i)

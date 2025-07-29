@@ -41,5 +41,7 @@ void print_values_DS18B20()
 {
     print_str_lcd("T(aussen):  ");
     print_float_lcd(read_temp(0));
-    print_str_lcd(" °C\n");
+    print_str_lcd(" ");
+	  print_char_lcd((char)247);                        // degree symbol
+    print_str_lcd("C\n");
 }

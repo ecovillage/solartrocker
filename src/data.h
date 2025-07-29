@@ -26,6 +26,7 @@ float avarage_ringbuffer(int value);
 float avarage_humidity_bme();
 float delta_min_max_abs_humidity();
 void send_data_UART();
+float saturation_vapor_pressure(float temperature);
 float calculateAbsoluteHumidity(float temperature, float relativeHumidity);
 float calculatePineEMC(float temperature, float relativeHumidity);
 float* get_ring_buffer(int i);

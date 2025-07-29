@@ -14,6 +14,7 @@
 #include "sht3x.h"
 #include <Wire.h>
 #include "lcd.h"
+#include "data.h"
 
 #define SHT3X_AUSSEN 0x45
 #define SHT3X_HOLZ   0x44
@@ -78,14 +79,16 @@ float read_holz_temperature()
 
 float read_holz_humidity()
 {
-    return (read_sht3x_humidity(SHT3X_HOLZ));
+    return (read_sht3x_humidity(SHT3X_HOLZ)); //calculatePineEMC(read_holz_temperature(), 
 }
 
 void print_values_SHT3X()
 {
     print_str_lcd("T(aussen):  "); 
     print_float_lcd(read_aussen_temperature());
-    print_str_lcd(" °C\n");
+    print_str_lcd(" ");
+	print_char_lcd((char)247);                        // degree symbol
+    print_str_lcd("C\n");
 	
 	print_str_lcd("F(aussen):  "); 
     print_float_lcd(read_aussen_humidity());
@@ -93,7 +96,9 @@ void print_values_SHT3X()
 
 	print_str_lcd("T(Holz):    "); 
     print_float_lcd(read_holz_temperature());
-    print_str_lcd(" °C\n");
+    print_str_lcd(" ");
+	print_char_lcd((char)247);                        // degree symbol
+    print_str_lcd("C\n");
 	
 	print_str_lcd("F(Holz):    "); 
     print_float_lcd(read_holz_humidity());
