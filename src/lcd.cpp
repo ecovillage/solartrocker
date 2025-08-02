@@ -16,6 +16,7 @@
 #include "buttons.h"
 #include "fan.h"
 #include "siebenlindenlogo.h"
+#include "Tiny5x7_Umlaut.h"
 
 // Display
 #define OLED_MOSI    9
@@ -32,7 +33,8 @@ void lcd_setup()
 {
 	display.begin(SSD1306_SWITCHCAPVCC);
 	display.clearDisplay();
-	display.setTextSize(1);
+	display.setFont(&Tiny5x7_Umlaut);
+	//display.setTextSize(1); //nicht bei display.setfont
     display.setTextColor(WHITE);
 }
 

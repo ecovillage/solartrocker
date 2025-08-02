@@ -86,21 +86,17 @@ void print_values_SHT3X()
 {
     print_str_lcd("T(aussen):  "); 
     print_float_lcd(read_aussen_temperature());
-    print_str_lcd(" ");
-	print_char_lcd((char)247);                        // degree symbol
-    print_str_lcd("C\n");
+    print_str_lcd(" 'C\n");
 	
 	print_str_lcd("F(aussen):  "); 
     print_float_lcd(read_aussen_humidity());
-    print_str_lcd(" %RH\n");
+    print_str_lcd(" %\n");
 
 	print_str_lcd("T(Holz):    "); 
     print_float_lcd(read_holz_temperature());
-    print_str_lcd(" ");
-	print_char_lcd((char)247);                        // degree symbol
-    print_str_lcd("C\n");
+    print_str_lcd(" 'C\n");
 	
 	print_str_lcd("F(Holz):    "); 
     print_float_lcd(read_holz_humidity());
-    print_str_lcd(" %RH\n");
+    print_str_lcd(" %\n");
 }

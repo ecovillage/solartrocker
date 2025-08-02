@@ -14,7 +14,7 @@
 #define DATA_H
 
 enum ValueIndex {
-    T_innen = 0,
+    T_innen,
 	F_innen,
     F_abs_innen,
     NUM_VALUES  // entspricht x + 1, wichtig für Schleifen etc.
@@ -35,5 +35,6 @@ float min_array(float *arr, const int size);
 float max_array(float *arr, const int size);
 bool is_first_round();
 float humidity_changed_temperature(float t_begin, float h_begin, float t_end);
+void send_headline_UART();
 
 #endif

@@ -20,7 +20,7 @@
 #include "storage.h"
 #include "sht3x.h"
 
-const int max_values = 110;
+const int max_values = 100;
 float ring_buffer[NUM_VALUES][max_values];
 unsigned long  timestamp_last_save;
 const int interval = 20; // in Sekunden
@@ -33,6 +33,7 @@ void data_setup()
 {
     timestamp_last_save = timestamp_now_s();
 	ring_buffer[T_innen][max_values - 1] = -1;
+	send_headline_UART();
 }
 
 bool is_first_round()
@@ -115,34 +116,50 @@ void collect_data()
 	}
 }
 
+void send_headline_UART()
+{
+	Serial1.print(F("zyklus;"));
+	Serial1.print(F("timestamp;"));
+	Serial1.print(F("T_innen;"));
+	Serial1.print(F("F_innen;"));
+	Serial1.print(F("T_aussen;"));
+	Serial1.print(F("F_aussen;"));
+	Serial1.print(F("T_Holz;"));
+	Serial1.print(F("F_Holz;"));
+	Serial1.print(F("F_abs_innen;"));
+	Serial1.print(F("state_damper;"));
+	Serial1.print(F("state_fan;"));
+	Serial1.print(F("state;"));
+}
+
 void send_data_UART()
 {
-	Serial.print("zyklus;");
-	Serial.print(get_zyklus());
-	Serial.print(";timestamp;");
-	Serial.print(timestamp_last_save);
-	Serial.print(";T_innen;");
-	Serial.print(read_innen_temperature(), 1);
-	Serial.print(";F_innen;");
-	Serial.print(read_innen_humidity(), 1);
-	Serial.print(";T_aussen;");
-	Serial.print(read_aussen_temperature(), 1);
-	Serial.print(";F_aussen;");
-	Serial.print(read_aussen_humidity(), 1);
-	Serial.print(";T_Holz;");
-	Serial.print(read_holz_temperature(), 1);
-	Serial.print(";F_Holz;");
-	Serial.print(read_holz_humidity(), 1);
-	Serial.print(";F_abs_innen;");
-	Serial.print(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()), 3);	
-	Serial.print(";state_damper;");
-	Serial.print(get_damper_state());
-	Serial.print(";state_fan;");
-	Serial.print(get_fan_state());
-	Serial.print(";state;");
-	Serial.print(get_state());
-	Serial.println(";");
-}
+
+	Serial1.print(get_zyklus());
+	Serial1.print(F(";"));
+	Serial1.print(timestamp_last_save);
+	Serial1.print(F(";"));
+	Serial1.print(read_innen_temperature(), 1);
+	Serial1.print(F(";"));
+	Serial1.print(read_innen_humidity(), 1);
+	Serial1.print(F(";"));
+	Serial1.print(read_aussen_temperature(), 1);
+	Serial1.print(F(";"));
+	Serial1.print(read_aussen_humidity(), 1);
+	Serial1.print(F(";"));
+	Serial1.print(read_holz_temperature(), 1);
+	Serial1.print(F(";"));
+	Serial1.print(read_holz_humidity(), 1);
+	Serial1.print(F(";"));
+	Serial1.print(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()), 1);
+	Serial1.print(F(";"));
+	Serial1.print(get_damper_state());
+	Serial1.print(F(";"));
+	Serial1.print(get_fan_state());
+	Serial1.print(F(";"));
+	Serial1.print(get_state());
+	Serial1.println(F(";"));
+	}
 
 
 // Berechnet die neue relative Feuchte nach Temperaturänderung
@@ -166,8 +183,8 @@ float calculateAbsoluteHumidity(float temperature, float relativeHumidity) //Cha
 {
 	float absoluteHumidity;
 
-    absoluteHumidity = (saturation_vapor_pressure(temperature) * (relativeHumidity / 100.0f) * 2.1674f) / (273.15f + temperature);  // Absolute Feuchte (in g/m³)
-    return (absoluteHumidity * 100);
+    absoluteHumidity = (saturation_vapor_pressure(temperature) * 100.0f * (relativeHumidity / 100.0f) * 2.1674f) / (273.15f + temperature);  // Absolute Feuchte (in g/m³)
+    return (absoluteHumidity);
 }
 
 float calculatePineEMC(float temperature, float relativeHumidity) //ChatGPT
