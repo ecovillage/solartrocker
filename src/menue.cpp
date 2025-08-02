@@ -24,6 +24,13 @@ MenuItem menuItems[] = {
   {"Lueften", set_state_lueften},
   {"Heizen", set_state_heizen},
   {"Reset max Temp", reset_max_temp},
+  {"leer1", NULL},
+  {"leer2", NULL},
+  {"leer3", NULL},
+  {"leer4", NULL},
+  {"leer5", NULL},
+  {"leer6", NULL},
+  {"leer7", NULL}
 };
 
 const int menuItemCount = sizeof(menuItems) / sizeof(menuItems[0]);
@@ -40,14 +47,22 @@ void drawMenu() {
 	clear_lcd();
 	set_position_cursor_lcd(0,0);
 	setTextColor_display(WHITE, BLACK);
-	print_str_lcd("-- MENUE --\n\n");
-	for (int i = 0; i < menuItemCount; i++) {
-		if (i == selectedItem)
-			setTextColor_display(SSD1306_INVERSE, SSD1306_INVERSE);
+	print_str_lcd("MENUE: Seite ");
+	print_int_lcd((selectedItem / 6) + 1);
+	print_str_lcd("/");
+	print_int_lcd((menuItemCount / 6) + 1);
+	print_str_lcd("\n\n");
+	
+
+
+	for (int i = 0; i < min(menuItemCount, 6); i++) {
+		if (i + (selectedItem / 6) * 6 == selectedItem)
+			setTextColor_display(BLACK, WHITE);
 		else
 			setTextColor_display(WHITE, BLACK);
-		print_str_lcd(menuItems[i].label);
+		print_str_lcd(menuItems[i + (selectedItem / 6) * 6].label);
 		print_str_lcd("\n");
+		setTextColor_display(WHITE, BLACK);
 	}
 	display_on_lcd();
 }
