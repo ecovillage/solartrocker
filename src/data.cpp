@@ -20,7 +20,7 @@
 #include "storage.h"
 #include "sht3x.h"
 
-const int max_values = 100;
+const int max_values = 110;
 float ring_buffer[NUM_VALUES][max_values];
 unsigned long  timestamp_last_save;
 const int interval = 20; // in Sekunden

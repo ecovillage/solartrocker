@@ -52,6 +52,7 @@ void show_values_1()
 	print_max_temp();
 	print_state_damper();
 	print_state_fan();
+	print_zyklus();
 	display_on_lcd();
 }
 
@@ -149,4 +150,12 @@ void print_abs_humidity()
 	print_str_lcd("F(abs):     "); 
     print_float_lcd(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()));
     print_str_lcd(" g/m3\n");
+}
+
+
+void print_zyklus()
+{
+	print_str_lcd("Zyklus:     ");
+	print_int_lcd(get_zyklus());
+	print_str_lcd("\n");
 }
