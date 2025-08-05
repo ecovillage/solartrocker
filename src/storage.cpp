@@ -106,3 +106,8 @@ int get_zyklus()
 {
 	return (readValueFromEEPROM(zyklus_adress));
 }
+
+void set_zyklus(int nb)
+{
+	storeValueInEEPROM(zyklus_adress, nb);
+}

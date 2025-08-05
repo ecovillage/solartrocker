@@ -33,6 +33,8 @@ void data_setup()
 {
     timestamp_last_save = timestamp_now_s();
 	ring_buffer[T_innen][max_values - 1] = -1;
+	//set_zyklus(134);
+	increase_zyklus();
 	send_headline_UART();
 }
 
