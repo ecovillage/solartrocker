@@ -26,6 +26,7 @@ void print_serial_storage();
 void print_max_temp();
 int get_zyklus();
 void increase_zyklus();
+void set_zyklus(int nb);
 
 
 #endif

@@ -17,13 +17,13 @@ void setup()
 	Serial1.begin(9600);
 	Wire.begin();
 	delay(1000);
-	increase_zyklus();
-	fan_setup();
 	BME280_setup();
 	SHT3X_setup();
+	fan_setup();
 	damper_setup();
 	lcd_setup();
 	buttons_setup();
+	data_setup();
 	set_state_auto();
 }
 
