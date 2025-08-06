@@ -36,5 +36,7 @@ float max_array(float *arr, const int size);
 bool is_first_round();
 float humidity_changed_temperature(float t_begin, float h_begin, float t_end);
 void send_headline_UART();
+void printFloat_1digit(float f);
+int freeMemory();
 
 #endif

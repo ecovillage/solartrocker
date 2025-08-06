@@ -83,7 +83,6 @@ float delta_min_max_abs_humidity() //gibt die Differenz zwischen max H und min H
 {
 	float	min_h;
 	float	max_h;
-	int		max;
 
 	min_h = ring_buffer[F_abs_innen][0];
 	max_h = ring_buffer[F_abs_innen][0];
@@ -129,38 +128,40 @@ void send_headline_UART()
 	Serial1.print(F("F_abs_innen;"));
 	Serial1.print(F("state_damper;"));
 	Serial1.print(F("state_fan;"));
-	Serial1.println(F("state;"));
+	Serial1.print(F("state;"));
+	Serial1.println(F("free_memory;"));
 }
 
 void send_data_UART()
 {
 
 	Serial1.print(get_zyklus());
-	Serial1.print(F(";"));
+	Serial1.print(';');
 	Serial1.print(timestamp_last_save);
-	Serial1.print(F(";"));
-	Serial1.print(read_innen_temperature(), 1);
-	Serial1.print(F(";"));
-	Serial1.print(read_innen_humidity(), 1);
-	Serial1.print(F(";"));
-	Serial1.print(read_aussen_temperature(), 1);
-	Serial1.print(F(";"));
-	Serial1.print(read_aussen_humidity(), 1);
-	Serial1.print(F(";"));
-	Serial1.print(read_holz_temperature(), 1);
-	Serial1.print(F(";"));
-	Serial1.print(read_holz_humidity(), 1);
-	Serial1.print(F(";"));
-	Serial1.print(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()), 1);
-	Serial1.print(F(";"));
+	Serial1.print(';');
+	printFloat_1digit(read_innen_temperature());
+	Serial1.print(';');
+	printFloat_1digit(read_innen_humidity());
+	Serial1.print(';');
+	printFloat_1digit(read_aussen_temperature());
+	Serial1.print(';');
+	printFloat_1digit(read_aussen_humidity());
+	Serial1.print(';');
+	printFloat_1digit(read_holz_temperature());
+	Serial1.print(';');
+	printFloat_1digit(read_holz_humidity());
+	Serial1.print(';');
+	printFloat_1digit(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()));
+	Serial1.print(';');
 	Serial1.print(get_damper_state());
-	Serial1.print(F(";"));
+	Serial1.print(';');
 	Serial1.print(get_fan_state());
-	Serial1.print(F(";"));
+	Serial1.print(';');
 	Serial1.print(get_state());
-	Serial1.println(F(";"));
-	}
-
+	Serial1.print(';');
+	Serial1.print(freeMemory());
+	Serial1.println(';');
+}
 
 // Berechnet die neue relative Feuchte nach Temperaturänderung
 float humidity_changed_temperature(float t_begin, float h_begin, float t_end) {
@@ -214,4 +215,28 @@ float* get_ring_buffer(int i)
 int get_max_values()
 {
 	return (max_values);
+}
+
+void printFloat_1digit(float f) { //ChatGPT
+  int ganz = (int)f;
+  int nachkomma = abs((int)(f * 10) % 10);
+  Serial1.print(ganz);
+  Serial1.print('.');
+  Serial1.print(nachkomma);
+}
+
+//Memorykapazität anzeigen von ChatGPT
+extern int __heap_start;
+extern void *__brkval;
+
+int freeMemory()
+{
+	int v;
+	int freeMem;
+
+	if (__brkval == 0)
+		freeMem = (int)&v - (int)&__heap_start;
+	else
+		freeMem = (int)&v - (int)__brkval;
+	return (freeMem);
 }
