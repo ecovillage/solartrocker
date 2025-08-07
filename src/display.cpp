@@ -65,27 +65,27 @@ void show_values_2()
 
 	print_str_lcd("T(innen):   "); 
     print_float_lcd(read_innen_temperature());
-    print_str_lcd(" °C\n");
+    print_str_lcd(" 'C\n");
 	
 	print_str_lcd("T(aussen):  "); 
     print_float_lcd(read_aussen_temperature());
-    print_str_lcd(" °C\n");
+    print_str_lcd(" 'C\n");
 	
 	print_str_lcd("T(Holz):    "); 
     print_float_lcd(read_holz_temperature());
-    print_str_lcd(" °C\n");
+    print_str_lcd(" 'C\n");
 	
 	print_str_lcd("F(innen):   "); 
     print_float_lcd(read_innen_humidity());
-    print_str_lcd(" %RH\n");
+    print_str_lcd(" %rH\n");
 	
 	print_str_lcd("F(aussen):  "); 
     print_float_lcd(read_aussen_humidity());
-    print_str_lcd(" %RH\n");
+    print_str_lcd(" %rH\n");
 	
 	print_str_lcd("F(Holz):    "); 
     print_float_lcd(read_holz_humidity());
-    print_str_lcd(" %RH\n");
+    print_str_lcd(" %rH\n");
 	
 	print_str_lcd("F(abs):     "); 
     print_float_lcd(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()));
