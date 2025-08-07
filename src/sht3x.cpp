@@ -62,16 +62,6 @@ float read_sht3x_humidity(uint8_t address)
     return (100 * (h_raw / 65535.0));
 }
 
-float read_aussen_temperature()
-{
-    return (read_sht3x_temperature(SHT3X_AUSSEN));
-}
-
-float read_aussen_humidity()
-{
-    return (read_sht3x_humidity(SHT3X_AUSSEN));
-}
-
 float read_holz_temperature()
 {
     return (read_sht3x_temperature(SHT3X_HOLZ));
@@ -84,14 +74,6 @@ float read_holz_humidity()
 
 void print_values_SHT3X()
 {
-    print_str_lcd("T(aussen):  "); 
-    print_float_lcd(read_aussen_temperature());
-    print_str_lcd(" 'C\n");
-	
-	print_str_lcd("F(aussen):  "); 
-    print_float_lcd(read_aussen_humidity());
-    print_str_lcd(" %\n");
-
 	print_str_lcd("T(Holz):    "); 
     print_float_lcd(read_holz_temperature());
     print_str_lcd(" 'C\n");
