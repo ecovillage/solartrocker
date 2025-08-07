@@ -32,10 +32,9 @@ bool	first_round = true;
 void data_setup()
 {
     timestamp_last_save = timestamp_now_s();
-	ring_buffer[T_innen][max_values - 1] = -1;
 	//set_zyklus(134);
 	increase_zyklus();
-	send_headline_UART();
+	//send_headline_UART();
 }
 
 bool is_first_round()
@@ -102,7 +101,7 @@ void collect_data()
 {
 	if (timestamp_now_s() - timestamp_last_save > interval)
 	{
-		if (ring_buffer[0][0] != -1)
+		if (ring_buffer[0][0] != 0)
 			first_round = false;
 		for (int i = 0; i < NUM_VALUES; i++)
 		{
@@ -131,7 +130,6 @@ void send_headline_UART()
 	Serial1.print(F("state_damper;"));
 	Serial1.print(F("state_fan;"));
 	Serial1.print(F("state;"));
-	Serial1.println(F("free_memory;"));
 }
 
 void send_data_UART()
@@ -147,6 +145,7 @@ void send_data_UART()
 	Serial1.print(';');
 	printFloat_1digit(read_aussen_temperature());
 	Serial1.print(';');
+	Serial1.flush();
 	printFloat_1digit(read_aussen_humidity());
 	Serial1.print(';');
 	printFloat_1digit(read_holz_temperature());
@@ -160,9 +159,8 @@ void send_data_UART()
 	Serial1.print(get_fan_state());
 	Serial1.print(';');
 	Serial1.print(get_state());
-	Serial1.print(';');
-	Serial1.print(freeMemory());
 	Serial1.println(';');
+	Serial1.flush();
 }
 
 // Berechnet die neue relative Feuchte nach Temperaturänderung

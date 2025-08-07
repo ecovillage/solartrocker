@@ -15,6 +15,7 @@
 void setup()
 {
 	Serial1.begin(9600);
+	Serial.begin(9600);
 	Wire.begin();
 	delay(1000);
 	BME280_setup();
@@ -25,10 +26,23 @@ void setup()
 	buttons_setup();
 	data_setup();
 	set_state_auto();
+
 }
 
 void loop()
 {
+	/*Serial.println("start");
+	Serial1.print("Start");
+	Serial1.flush();
+	for (int i = 0; i < 20000; i++)
+	{
+		Serial1.println(i);
+		Serial.println(i);
+		delay(10);
+	}
+	Serial.println("fertig");*/
+
+
 	if (button1_pressed())
 	{
 		set_state_menue();
@@ -47,4 +61,5 @@ void loop()
 	display();
 	collect_data();
 	delay(300);
+
 }

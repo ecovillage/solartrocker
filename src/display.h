@@ -23,5 +23,6 @@ void show_values_2();
 void display();
 void print_abs_humidity();
 void print_zyklus();
+void print_info();
 
 #endif

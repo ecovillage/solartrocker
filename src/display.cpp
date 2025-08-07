@@ -53,6 +53,7 @@ void show_values_1()
 	print_state_damper();
 	print_state_fan();
 	print_zyklus();
+	print_info();
 	display_on_lcd();
 }
 
@@ -157,5 +158,12 @@ void print_zyklus()
 {
 	print_str_lcd("Zyklus:     ");
 	print_int_lcd(get_zyklus());
+	print_str_lcd("\n");
+}
+
+void print_info()
+{
+	print_str_lcd("Memory:     ");
+	print_int_lcd(freeMemory());
 	print_str_lcd("\n");
 }
