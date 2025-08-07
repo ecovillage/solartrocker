@@ -145,13 +145,14 @@ void send_data_UART()
 	Serial1.print(';');
 	printFloat_1digit(read_aussen_temperature());
 	Serial1.print(';');
-	Serial1.flush();
+	delay(100);
 	printFloat_1digit(read_aussen_humidity());
 	Serial1.print(';');
 	printFloat_1digit(read_holz_temperature());
 	Serial1.print(';');
 	printFloat_1digit(read_holz_humidity());
 	Serial1.print(';');
+	delay(100);
 	printFloat_1digit(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()));
 	Serial1.print(';');
 	Serial1.print(get_damper_state());
