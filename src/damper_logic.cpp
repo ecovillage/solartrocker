@@ -19,24 +19,10 @@ unsigned long	timestamp_heating = 0;
 const float		min_change_hydr = 2;
 float			temp_start_heating;
 unsigned long	timestamp_auto = 0;
-unsigned long	timestamp_state_menue = 0;
 unsigned long	timestamp_state_RF_const = 0;
-const int		time_state_menue = 10; // Sekunden
+unsigned long	timestamp_manuel = 0;
 int 			state = 0;
 int				last_state = 0;
-
-void state_menue()
-{
-	while (get_state() == 4)
-	{
-		show_menue();
-		if (timestamp_now_s() - timestamp_state_menue > time_state_menue)
-		{
-			set_state_auto();
-		}
-		set_time_LCD(time_state_menue - (timestamp_now_s() - timestamp_state_menue));
-	}
-}
 
 void set_state(int nb)
 {
@@ -44,23 +30,34 @@ void set_state(int nb)
 	state = nb;
 }
 
+void set_state_manuel()
+{
+	set_state(Manuel);
+	set_modus_display(Display_Values);
+	set_text_state("manuell");
+	timestamp_manuel = timestamp_now_s();
+}
+
 void set_state_auto()
 {
-	set_state(0);
+	set_state(Auto);
+	set_modus_display(Display_Values);
 	set_text_state("auto");
 	timestamp_auto = timestamp_now_s();
 }
 
 void set_state_lueften()
 {
-	set_state(1);
+	set_state(Lueften);
+	set_modus_display(Display_Values);
 	set_text_state("Lueften");
 	timestamp_dehydrating = timestamp_now_s();
 }
 
 void set_state_heizen()
 {
-	set_state(2);
+	set_state(Heizen);
+	set_modus_display(Display_Values);
 	set_text_state("Heizen");
 	timestamp_heating = timestamp_now_s();
 	temp_start_heating = read_innen_temperature();
@@ -68,16 +65,10 @@ void set_state_heizen()
 
 void set_state_RF_const()
 {
-	set_state(3);
+	set_state(RF_const);
+	set_modus_display(Display_Values);
 	set_text_state("RF konst");
 	timestamp_state_RF_const = timestamp_now_s();
-}
-
-void set_state_menue()
-{
-	set_state(4);
-	set_text_state("Menue");
-	timestamp_state_menue = timestamp_now_s();
 }
 
 int get_state()

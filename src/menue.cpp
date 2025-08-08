@@ -17,24 +17,41 @@
 #include "buttons.h"
 #include <Adafruit_SSD1306.h>
 #include "damper_logic.h"
-#include "damper_logic.h"
+#include "damper.h"
 #include "storage.h"
+#include "display.h"
+
 
 MenuItem menuItems[] = {
-  {"Lueften", set_state_lueften},
-  {"Heizen", set_state_heizen},
-  {"Reset max Temp", reset_max_temp},
-  {"leer1", NULL},
-  {"leer2", NULL},
-  {"leer3", NULL},
-  {"leer4", NULL},
-  {"leer5", NULL},
-  {"leer6", NULL},
-  {"leer7", NULL}
+	{"Automatik an", set_state_auto},
+	{"Luefter aendern", change_luefter},
+	{"Klappen aendern", change_klappen},
+	{"Reset max Temp", reset_max_temp},
+	{"leer1", NULL},
+	{"leer2", NULL},
 };
 
 const int menuItemCount = sizeof(menuItems) / sizeof(menuItems[0]);
 int selectedItem = 0;
+
+void change_luefter()
+{
+	set_state_manuel();
+	if (get_fan_state() == 0)
+		fan_on();
+	else
+		fan_off();
+}
+
+void change_klappen()
+{
+	set_state_manuel();
+	if (get_damper_state() == 0)
+		open_damper();
+	else
+		close_damper();
+}
+
 
 
 void handleSelection() {
@@ -69,14 +86,14 @@ void drawMenu() {
 
 void show_menue()
 {
+	drawMenu();
 	if (button1_pressed()) {
   		selectedItem = (selectedItem + 1) % menuItemCount;
 	}
 	if (button2_pressed()) {
-  		set_state_auto();
+  		set_modus_display(Display_Values);
 	}
-	if (button3_pressed()) {
+	else if (button3_pressed()) {
  		handleSelection();
 	}
-	drawMenu();
 }

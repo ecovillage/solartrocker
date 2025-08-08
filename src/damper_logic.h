@@ -1,8 +1,18 @@
 #ifndef _DAMPER_LOGIC_H
 #define _DAMPER_LOGIC_H
 
+enum stateIndex {
+    Auto,
+	Lueften,
+	Heizen,
+	RF_const,
+	Manuel,
+    NUM_stateIndex  // entspricht x + 1, wichtig für Schleifen etc.
+};
+
 bool air_too_moist(float air_humidity_inside, float air_temperature_inside);
 void state_auto();
+void set_state_manuel();
 void state_dehydrating();
 void state_heating();
 void state_RF_const();

@@ -31,32 +31,18 @@ void setup()
 
 void loop()
 {
-	/*Serial.println("start");
-	Serial1.print("Start");
-	Serial1.flush();
-	for (int i = 0; i < 20000; i++)
+	if (button1_pressed() && get_modus_display() != Display_Menue)
 	{
-		Serial1.println(i);
-		Serial.println(i);
-		delay(10);
+		set_modus_display(Display_Menue);;
 	}
-	Serial.println("fertig");*/
-
-
-	if (button1_pressed())
-	{
-		set_state_menue();
-	}
-	if (get_state() == 0)
+	if (get_state() == Auto)
 		state_auto();
-	else if (get_state() == 1)
+	else if (get_state() == Lueften)
 		state_dehydrating();
-	else if (get_state() == 2)
+	else if (get_state() == Heizen)
 		state_heating();
-	else if (get_state() == 3)
+	else if (get_state() == RF_const)
 		state_RF_const();
-	else if (get_state() == 4)
-		state_menue();
 	save_max_temp();
 	display();
 	collect_data();

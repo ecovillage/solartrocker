@@ -17,7 +17,7 @@ enum ValueIndex {
     T_innen,
 	F_innen,
     F_abs_innen,
-    NUM_VALUES  // entspricht x + 1, wichtig für Schleifen etc.
+    NUM_ValueIndex  // entspricht x + 1, wichtig für Schleifen etc.
 };
 
 void data_setup();

@@ -21,7 +21,7 @@
 #include "sht3x.h"
 
 const int max_values = 110;
-float ring_buffer[NUM_VALUES][max_values];
+float ring_buffer[NUM_ValueIndex][max_values];
 unsigned long  timestamp_last_save;
 const int interval = 20; // in Sekunden
 bool	first_round = true;
@@ -103,7 +103,7 @@ void collect_data()
 	{
 		if (ring_buffer[0][0] != 0)
 			first_round = false;
-		for (int i = 0; i < NUM_VALUES; i++)
+		for (int i = 0; i < NUM_ValueIndex; i++)
 		{
 			for (int j = 0; j < max_values - 1; j++)
 				ring_buffer[i][j] = ring_buffer[i][j + 1];

@@ -12,32 +12,53 @@
 #include "data.h"
 #include "sht3x.h"
 #include <Adafruit_SSD1306.h>
+#include "menue.h"
 
-char text_state[12];
-unsigned long time_LCD;
+char			text_state[12];
+unsigned long	time_LCD;
 unsigned long	timestamp_display = 0;
 const int		time_display = 5; // Sekunden
-int				modus_display = 0;
+int				modus_display_values = 0;
+int				modus_display = Display_Values;
+
 
 void display()
 {
-	if (modus_display == 0)
+	if (modus_display == Display_Values)
+		display_values();
+	if (modus_display == Display_Menue)
+		show_menue();
+}
+
+void set_modus_display(int nb)
+{
+	modus_display = nb;
+}
+
+int get_modus_display()
+{
+	return (modus_display);
+}
+
+void display_values()
+{
+	if (modus_display_values == 0)
 		show_logo();
-	if (modus_display == 1)
+	if (modus_display_values == 1)
 		show_values_1();
-	if (modus_display == 2)
+	if (modus_display_values == 2)
 		show_values_2();
-	if (modus_display == 3)
+	if (modus_display_values == 3)
 		plot_graph(get_ring_buffer(T_innen), "T ('C)");
-	if (modus_display == 4)
+	if (modus_display_values == 4)
 		plot_graph(get_ring_buffer(F_innen), "rF (%)");
-	if (modus_display == 5)
+	if (modus_display_values == 5)
 		plot_graph(get_ring_buffer(F_abs_innen), "aF (g/m3)"); 
 	if (timestamp_now_s() - timestamp_display > time_display)
 	{
-		modus_display++;
-		if (modus_display > 5)
-			modus_display = 1;
+		modus_display_values++;
+		if (modus_display_values > 5)
+			modus_display_values = 1;
 		timestamp_display = timestamp_now_s();
 	}
 }
