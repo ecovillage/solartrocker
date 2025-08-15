@@ -17,7 +17,7 @@
 char			text_state[12];
 unsigned long	time_LCD;
 unsigned long	timestamp_display = 0;
-const int		time_display = 5; // Sekunden
+const int		time_display = 7; // Sekunden
 int				modus_display_values = 0;
 int				modus_display = Display_Values;
 
@@ -98,15 +98,15 @@ void show_values_2()
 	
 	print_str_lcd("F(innen):   "); 
     print_float_lcd(read_innen_humidity());
-    print_str_lcd(" %rH\n");
+    print_str_lcd(" %rF\n");
 	
 	print_str_lcd("F(aussen):  "); 
     print_float_lcd(read_aussen_humidity());
-    print_str_lcd(" %rH\n");
+    print_str_lcd(" %rF\n");
 	
 	print_str_lcd("F(Holz):    "); 
     print_float_lcd(read_holz_humidity());
-    print_str_lcd(" %rH\n");
+    print_str_lcd(" %rF\n");
 	
 	print_str_lcd("F(abs):     "); 
     print_float_lcd(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()));
