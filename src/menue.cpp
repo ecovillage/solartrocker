@@ -27,12 +27,18 @@ MenuItem menuItems[] = {
 	{"Luefter aendern", change_luefter},
 	{"Klappen aendern", change_klappen},
 	{"Reset max Temp", reset_max_temp},
-	{"leer1", NULL},
-	{"leer2", NULL},
+	{"Lueften", set_state_lueften},
+	{"Heizen", set_state_heizen},
 };
 
 const int menuItemCount = sizeof(menuItems) / sizeof(menuItems[0]);
 int selectedItem = 0;
+
+void set_selectedItem(int nb)
+{
+	selectedItem = nb;
+}
+
 
 void change_luefter()
 {

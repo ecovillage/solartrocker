@@ -22,5 +22,8 @@ void handleSelection(int index);
 void drawMenu();
 void show_menue();
 void drawMenuItem(char *nb, char *entry, bool selected);
+void change_luefter();
+void change_klappen();
+void set_selectedItem(int nb);
 
 #endif
