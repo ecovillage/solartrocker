@@ -162,10 +162,17 @@ void state_RF_const()
 	{
 		if (read_innen_temperature() > read_temp(0) + 5)
 			set_state_lueften();
+		else if ((timestamp_now_s() - timestamp_state_RF_const) % (30 * 60) > 29 * 60) //Zeit läuft in einem 30-Minuten-Zyklus. Sobald der Zyklusrest 1740 Sekunden oder mehr ist → Lüfter an
+			fan_on();
 		else
 			fan_off();
 	}
 	else
 		set_state_auto();
 	set_time_LCD(timestamp_now_s() - timestamp_state_RF_const);
+}
+
+void state_manuel()
+{
+	set_time_LCD(timestamp_now_s() - timestamp_manuel);
 }

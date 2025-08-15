@@ -28,5 +28,6 @@ void set_state_lueften();
 void set_state_heizen();
 void set_state_RF_const();
 void set_state_menue();
+void state_manuel();
 
 #endif
