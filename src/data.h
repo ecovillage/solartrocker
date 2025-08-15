@@ -38,5 +38,7 @@ float humidity_changed_temperature(float t_begin, float h_begin, float t_end);
 void send_headline_UART();
 void printFloat_1digit(float f);
 int freeMemory();
+void create_new_file();
+
 
 #endif
