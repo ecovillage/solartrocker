@@ -11,6 +11,7 @@
 #include "damper_logic.h"
 #include <Wire.h>
 #include "sht3x.h"
+#include "menue.h"
 
 void setup()
 {
@@ -31,10 +32,12 @@ void setup()
 
 void loop()
 {
-	if (button1_pressed() && get_modus_display() != Display_Menue)
-	{
-		set_modus_display(Display_Menue);;
-	}
+	if (get_modus_display() != Display_Menue)
+		if (button1_pressed())
+		{
+			set_selectedItem(0);
+			set_modus_display(Display_Menue);
+		}
 	if (get_state() == Auto)
 		state_auto();
 	else if (get_state() == Lueften)
@@ -43,9 +46,11 @@ void loop()
 		state_heating();
 	else if (get_state() == RF_const)
 		state_RF_const();
+	else if (get_state() == Manuel)
+		state_manuel();
 	save_max_temp();
 	display();
 	collect_data();
-	delay(300);
+	delay(100);
 
 }
