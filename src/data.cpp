@@ -25,7 +25,7 @@ int pin_create_file = 14;
 const int max_values = 110;
 float ring_buffer[NUM_ValueIndex][max_values];
 unsigned long  timestamp_last_save;
-const int interval = 20; // in Sekunden
+const int interval = 20; // in Sekunden, Standart = 20
 bool	first_round = true;
 
 
@@ -36,6 +36,7 @@ void data_setup()
 	increase_zyklus();
 	pinMode(pin_create_file, OUTPUT);
  	digitalWrite(pin_create_file, HIGH);
+	create_new_file();
 }
 
 bool is_first_round()
@@ -137,23 +138,32 @@ void send_headline_UART()
 void send_data_UART()
 {
 	static int count;
-	char datensatz[128];
-	sprintf(datensatz, "%d;%d;%.1f;%.1f;%.1f;%.1f;%.1f;%.1f;%.1f;%d;%d;%d;\n",
-        get_zyklus(),
-        timestamp_last_save,
-        read_innen_temperature(),
-        read_innen_humidity(),
-        read_aussen_temperature(),
-        read_aussen_humidity(),
-        read_holz_temperature(),
-        read_holz_humidity(),
-        calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()),
-        get_damper_state(),
-        get_fan_state(),
-        get_state()
-	);
-	count += Serial1.print(datensatz);
-	if (count > 15000)
+	count += Serial1.print(get_zyklus());
+	count += Serial1.print(';');
+	count += Serial1.print(timestamp_last_save);
+	count += Serial1.print(';');
+	count += printFloat_1digit(read_innen_temperature());
+	count += Serial1.print(';');
+	count += printFloat_1digit(read_innen_humidity());
+	count += Serial1.print(';');
+	count += printFloat_1digit(read_aussen_temperature());
+	count += Serial1.print(';');
+	count += printFloat_1digit(read_aussen_humidity());
+	count += Serial1.print(';');
+	count += printFloat_1digit(read_holz_temperature());
+	count += Serial1.print(';');
+	count += printFloat_1digit(read_holz_humidity());
+	count += Serial1.print(';');
+	count += printFloat_1digit(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()));
+	count += Serial1.print(';');
+	count += Serial1.print(get_damper_state());
+	count += Serial1.print(';');
+	count += Serial1.print(get_fan_state());
+	count += Serial1.print(';');
+	count += Serial1.print(get_state());
+	count += Serial1.print(';');
+	count += Serial1.print('\n');
+	if (count > 10000) //15000??
 	{
 		count = 0;
 		create_new_file();
@@ -215,12 +225,16 @@ int get_max_values()
 	return (max_values);
 }
 
-void printFloat_1digit(float f) { //ChatGPT
-  int ganz = (int)f;
-  int nachkomma = abs((int)(f * 10) % 10);
-  Serial1.print(ganz);
-  Serial1.print('.');
-  Serial1.print(nachkomma);
+int printFloat_1digit(float f) { //ChatGPT
+	int count;
+
+	count = 0;	
+	int ganz = (int)f;
+  	int nachkomma = abs((int)(f * 10) % 10);
+  	count += Serial1.print(ganz);
+  	count += Serial1.print(',');
+  	count += Serial1.print(nachkomma);
+	return (count);
 }
 
 //Memorykapazität anzeigen von ChatGPT
@@ -242,7 +256,8 @@ int freeMemory()
 void create_new_file()
 {
   // Low level triggers the save
-  digitalWrite(pin_create_file, LOW);
-  delay(500); // Duration of trigger
-  digitalWrite(pin_create_file, HIGH);
+	delay(100); // warten damit Buffer geleert werden kann 
+	digitalWrite(pin_create_file, LOW);
+	delay(500); // Duration of trigger
+	digitalWrite(pin_create_file, HIGH);
 }
