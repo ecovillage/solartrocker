@@ -39,6 +39,7 @@ void send_headline_UART();
 void printFloat_1digit(float f);
 int freeMemory();
 void create_new_file();
+bool is_day();
 
 
 #endif

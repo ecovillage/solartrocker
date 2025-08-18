@@ -21,6 +21,7 @@ float			temp_start_heating;
 unsigned long	timestamp_auto = 0;
 unsigned long	timestamp_state_RF_const = 0;
 unsigned long	timestamp_manuel = 0;
+unsigned long	timestamp_night = 0;
 int 			state = 0;
 int				last_state = 0;
 
@@ -42,7 +43,7 @@ void set_state_auto()
 {
 	set_state(Auto);
 	set_modus_display(Display_Values);
-	set_text_state("auto");
+	set_text_state("automatik");
 	timestamp_auto = timestamp_now_s();
 }
 
@@ -69,6 +70,14 @@ void set_state_RF_const()
 	set_modus_display(Display_Values);
 	set_text_state("RF konst");
 	timestamp_state_RF_const = timestamp_now_s();
+}
+
+void set_state_night()
+{
+	set_state(Night);
+	set_modus_display(Display_Values);
+	set_text_state("Nacht-Modus");
+	timestamp_night = timestamp_now_s();
 }
 
 int get_state()
@@ -106,6 +115,11 @@ unsigned long timestamp_now_s(void)
 
 void state_auto()
 {
+	if (is_day == false)
+	{
+		set_state_night();
+		return ;
+	}
 	if (air_too_moist(read_innen_humidity(),read_innen_temperature()) && read_innen_humidity() > humidity_changed_temperature(read_aussen_temperature(), read_aussen_humidity(), read_innen_temperature()))
 	{
 		set_state_lueften();
@@ -175,4 +189,19 @@ void state_RF_const()
 void state_manuel()
 {
 	set_time_LCD(timestamp_now_s() - timestamp_manuel);
+}
+
+void state_night()
+{
+	close_damper();
+	if ((timestamp_now_s() - timestamp_night) % (30 * 60) > 29 * 60) //Zeit läuft in einem 30-Minuten-Zyklus. Sobald der Zyklusrest 1740 Sekunden oder mehr ist → Lüfter an
+			fan_on();
+		else
+			fan_off();
+	if (is_day() == true)
+	{
+		set_state_auto();
+		return ;
+	}
+	set_time_LCD(timestamp_now_s() - timestamp_night);
 }

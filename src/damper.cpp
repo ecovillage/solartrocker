@@ -29,6 +29,7 @@ void open_damper()
 	state_damper = 1;
 }
 
+
 void close_damper()
 {
 	digitalWrite(pin_Motor, LOW);

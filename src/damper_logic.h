@@ -7,6 +7,7 @@ enum stateIndex {
 	Heizen,
 	RF_const,
 	Manuel,
+	Night,
     NUM_stateIndex  // entspricht x + 1, wichtig für Schleifen etc.
 };
 
@@ -16,6 +17,7 @@ void set_state_manuel();
 void state_dehydrating();
 void state_heating();
 void state_RF_const();
+void state_night();
 void state_menue();
 void check_fan_neccessary();
 void print_time_lueften();
@@ -27,6 +29,7 @@ void set_state_auto();
 void set_state_lueften();
 void set_state_heizen();
 void set_state_RF_const();
+void set_state_night();
 void set_state_menue();
 void state_manuel();
 

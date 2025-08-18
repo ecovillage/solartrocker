@@ -48,9 +48,11 @@ void loop()
 		state_RF_const();
 	else if (get_state() == Manuel)
 		state_manuel();
+	else if (get_state() == Night)
+		state_night();
 	save_max_temp();
 	display();
 	collect_data();
-	delay(100);
+	delay(500);
 
 }

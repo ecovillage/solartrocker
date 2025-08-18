@@ -184,7 +184,7 @@ void print_zyklus()
 
 void print_info()
 {
-	print_str_lcd("Memory:     ");
-	print_int_lcd(freeMemory());
+	print_str_lcd("Day:    ");
+	print_int_lcd(is_day());
 	print_str_lcd("\n");
 }

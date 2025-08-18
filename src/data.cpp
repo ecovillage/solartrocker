@@ -21,6 +21,7 @@
 #include "sht3x.h"
 
 int pin_create_file = 14;
+int pin_LDR = 15;
 
 const int max_values = 110;
 float ring_buffer[NUM_ValueIndex][max_values];
@@ -245,4 +246,16 @@ void create_new_file()
   digitalWrite(pin_create_file, LOW);
   delay(500); // Duration of trigger
   digitalWrite(pin_create_file, HIGH);
+}
+
+bool is_day() 
+{
+	int ldrWert;
+
+	ldrWert = analogRead(pin_LDR);   // LDR-Wert einlesen (0–1023)
+	Serial.println(ldrWert); 
+  	if (ldrWert > 150) // Schwellenwert für Tageslicht (anpassen je nach LDR)
+		return (true); // Tag
+	else
+		return (false); // Nacht
 }
