@@ -20,6 +20,7 @@
 #include "damper.h"
 #include "storage.h"
 #include "display.h"
+#include "data.h"
 
 
 MenuItem menuItems[] = {
@@ -29,6 +30,7 @@ MenuItem menuItems[] = {
 	{"Reset max Temp", reset_max_temp},
 	{"Lueften", set_state_lueften},
 	{"Heizen", set_state_heizen},
+	{"create new File", create_new_file}
 };
 
 const int menuItemCount = sizeof(menuItems) / sizeof(menuItems[0]);
@@ -73,7 +75,7 @@ void drawMenu() {
 	print_str_lcd("MENUE: Seite ");
 	print_int_lcd((selectedItem / 6) + 1);
 	print_str_lcd("/");
-	print_int_lcd((menuItemCount / 6) + 1);
+	print_int_lcd(((menuItemCount - 1) / 6) + 1);
 	print_str_lcd("\n\n");
 	
 
