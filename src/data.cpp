@@ -282,7 +282,7 @@ int read_LDR() //LDR-Wert einlesen
 
 bool is_day() 
 {
-  	if (avarage_ringbuffer(Helligkeit, 3) > 150) // Schwellenwert für Tageslicht (anpassen je nach LDR)
+  	if (avarage_ringbuffer(Helligkeit, 5 * 3) > 150) // Schwellenwert für Tageslicht (anpassen je nach LDR)
 		return (true); // Tag
 	else
 		return (false); // Nacht
