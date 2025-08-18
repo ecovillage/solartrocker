@@ -184,7 +184,7 @@ void print_zyklus()
 
 void print_info()
 {
-	print_str_lcd("Day:    ");
-	print_int_lcd(is_day());
+	print_str_lcd("LDR:        ");
+	print_int_lcd(read_LDR());
 	print_str_lcd("\n");
 }

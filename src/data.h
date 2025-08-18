@@ -17,12 +17,14 @@ enum ValueIndex {
     T_innen,
 	F_innen,
     F_abs_innen,
+	Helligkeit,
     NUM_ValueIndex  // entspricht x + 1, wichtig für Schleifen etc.
 };
 
 void data_setup();
+void init_ring_buffer();
 void collect_data();
-float avarage_ringbuffer(int value);
+float avarage_ringbuffer(int value, int nb);
 float avarage_humidity_bme();
 float delta_min_max_abs_humidity();
 void send_data_UART();
@@ -40,6 +42,7 @@ int printFloat_1digit(float f);
 int freeMemory();
 void create_new_file();
 bool is_day();
+int read_LDR();
 
 
 #endif

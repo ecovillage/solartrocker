@@ -24,7 +24,7 @@ int pin_create_file = 14;
 int pin_LDR = 15;
 
 const int max_values = 110;
-float ring_buffer[NUM_ValueIndex][max_values];
+float ring_buffer[NUM_ValueIndex][max_values] = {0};
 unsigned long  timestamp_last_save;
 const int interval = 20; // in Sekunden, Standart = 20
 bool	first_round = true;
@@ -38,6 +38,13 @@ void data_setup()
 	pinMode(pin_create_file, OUTPUT);
  	digitalWrite(pin_create_file, HIGH);
 	create_new_file();
+	init_ring_buffer();
+}
+
+void init_ring_buffer()
+{
+    for (int i = 0; i < max_values; i++)
+        ring_buffer[Helligkeit][i] = 1000.0f;
 }
 
 bool is_first_round()
@@ -45,14 +52,14 @@ bool is_first_round()
 	return (first_round);
 }
 
-float avarage_ringbuffer(int value)
+float avarage_ringbuffer(int value, int nb)
 {
 	float	sum;
 
 	sum = 0;
-	for (int i = 0; i <= max_values - 1; i++)
+	for (int i = max_values - nb; i <= max_values - 1; i++)
 		sum += ring_buffer[value][i];
-	return (sum/(max_values));
+	return (sum/nb);
 }
 
 float min_array(float *arr, const int size) //gibt die Differenz zwischen max H und min H aus dem Ringbuffer zurück, außer bei ersten Füllen des Ringbuffers
@@ -114,6 +121,7 @@ void collect_data()
 		ring_buffer[T_innen][max_values - 1] = read_innen_temperature();
 		ring_buffer[F_innen][max_values - 1] = read_innen_humidity();
 		ring_buffer[F_abs_innen][max_values - 1] = calculateAbsoluteHumidity(ring_buffer[T_innen][max_values - 1], ring_buffer[F_innen][max_values - 1]);
+		ring_buffer[Helligkeit][max_values - 1] = read_LDR();
 		send_data_UART();
 		timestamp_last_save = timestamp_now_s();
 	}
@@ -162,6 +170,8 @@ void send_data_UART()
 	count += Serial1.print(get_fan_state());
 	count += Serial1.print(';');
 	count += Serial1.print(get_state());
+	count += Serial1.print(';');
+	count += Serial1.print(read_LDR());
 	count += Serial1.print(';');
 	count += Serial1.print('\n');
 	if (count > 10000) //15000??
@@ -262,18 +272,18 @@ void create_new_file()
   digitalWrite(pin_create_file, HIGH);
 }
 
-bool is_day() 
+int read_LDR() //LDR-Wert einlesen
 {
 	int ldrWert;
 
-	ldrWert = analogRead(pin_LDR);   // LDR-Wert einlesen (0–1023)
-	Serial.println(ldrWert); 
-  	if (ldrWert > 150) // Schwellenwert für Tageslicht (anpassen je nach LDR)
+	ldrWert = analogRead(pin_LDR);   // LDR-Wert einlesen (0–1023) 
+	return (ldrWert);
+}
+
+bool is_day() 
+{
+  	if (avarage_ringbuffer(Helligkeit, 3) > 150) // Schwellenwert für Tageslicht (anpassen je nach LDR)
 		return (true); // Tag
 	else
 		return (false); // Nacht
-	delay(100); // warten damit Buffer geleert werden kann 
-	digitalWrite(pin_create_file, LOW);
-	delay(500); // Duration of trigger
-	digitalWrite(pin_create_file, HIGH);
 }

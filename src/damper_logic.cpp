@@ -115,7 +115,7 @@ unsigned long timestamp_now_s(void)
 
 void state_auto()
 {
-	if (is_day == false)
+	if (is_day() == false)
 	{
 		set_state_night();
 		return ;

@@ -53,6 +53,7 @@ void loop()
 	save_max_temp();
 	display();
 	collect_data();
-	delay(500);
+	Serial.println(get_state());
+	delay(100);
 
 }
