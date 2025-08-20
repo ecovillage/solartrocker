@@ -27,7 +27,7 @@ void setup()
 	buttons_setup();
 	data_setup();
 	set_state_auto();
-
+	collect_data();
 }
 
 void loop()

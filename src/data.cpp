@@ -24,6 +24,7 @@ int pin_create_file = 14;
 int pin_LDR = 15;
 
 const int max_values = 110;
+char infotext[50] = "";
 float ring_buffer[NUM_ValueIndex][max_values] = {0};
 unsigned long  timestamp_last_save;
 const int interval = 20; // in Sekunden, Standart = 20
@@ -39,6 +40,7 @@ void data_setup()
  	digitalWrite(pin_create_file, HIGH);
 	create_new_file();
 	init_ring_buffer();
+	infotext[sizeof(infotext)-1] = '\0';
 }
 
 void init_ring_buffer()
@@ -123,6 +125,7 @@ void collect_data()
 		ring_buffer[F_abs_innen][max_values - 1] = calculateAbsoluteHumidity(ring_buffer[T_innen][max_values - 1], ring_buffer[F_innen][max_values - 1]);
 		ring_buffer[Helligkeit][max_values - 1] = read_LDR();
 		send_data_UART();
+		clear_infotext();
 		timestamp_last_save = timestamp_now_s();
 	}
 }
@@ -149,7 +152,7 @@ void send_data_UART()
 	static int count;
 	count += Serial1.print(get_zyklus());
 	count += Serial1.print(';');
-	count += Serial1.print(timestamp_last_save);
+	count += Serial1.print(timestamp_now_s());
 	count += Serial1.print(';');
 	count += printFloat_1digit(read_innen_temperature());
 	count += Serial1.print(';');
@@ -173,13 +176,14 @@ void send_data_UART()
 	count += Serial1.print(';');
 	count += Serial1.print(read_LDR());
 	count += Serial1.print(';');
+	count += Serial1.print(get_infotext());
+	count += Serial1.print(';');
 	count += Serial1.print('\n');
 	if (count > 10000) //15000??
 	{
 		count = 0;
 		create_new_file();
 	}
-	Serial.println(count);
 }
 
 // Berechnet die neue relative Feuchte nach Temperaturänderung
@@ -282,8 +286,24 @@ int read_LDR() //LDR-Wert einlesen
 
 bool is_day() 
 {
-  	if (avarage_ringbuffer(Helligkeit, 5 * 3) > 150) // Schwellenwert für Tageslicht (anpassen je nach LDR)
+  	if (avarage_ringbuffer(Helligkeit,  3) > 800) // Schwellenwert für Tageslicht (anpassen je nach LDR)
 		return (true); // Tag
 	else
 		return (false); // Nacht
+}
+
+void set_infotext(const char* msg)
+{
+    strncpy(infotext, msg, sizeof(infotext)-1);
+    infotext[sizeof(infotext)-1] = '\0'; // sicherstellen, dass String terminiert ist
+}
+
+const char* get_infotext()
+{
+	return infotext;
+}
+
+void clear_infotext()
+{
+	infotext[0] = '\0'; // Setzt den String auf einen leeren Zustand
 }

@@ -43,6 +43,9 @@ int freeMemory();
 void create_new_file();
 bool is_day();
 int read_LDR();
+void set_infotext(const char* msg);
+const char* get_infotext();
+void clear_infotext();
 
 
 #endif

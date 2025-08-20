@@ -12,7 +12,7 @@
 #include "menue.h"
 #include "sht3x.h"
 
-const int		time_dehydrating = 2 * 60; // Sekunden
+const int		time_dehydrating = 2 * 60; // Sekunden, 2 = Erkenntnis wann Feuchte_abs_innen = Feuchte_abs_aussen
 unsigned long	timestamp_dehydrating = 0;
 const int		time_heating = 5 * 60; // Sekunden
 unsigned long	timestamp_heating = 0;
@@ -76,7 +76,7 @@ void set_state_night()
 {
 	set_state(Night);
 	set_modus_display(Display_Values);
-	set_text_state("Nacht-Modus");
+	set_text_state("Nacht-Mod");
 	timestamp_night = timestamp_now_s();
 }
 
@@ -117,16 +117,19 @@ void state_auto()
 {
 	if (is_day() == false)
 	{
+		set_infotext("is_day() == false");
 		set_state_night();
 		return ;
 	}
-	if (air_too_moist(read_innen_humidity(),read_innen_temperature()) && read_innen_humidity() > humidity_changed_temperature(read_aussen_temperature(), read_aussen_humidity(), read_innen_temperature()))
+	if (air_too_moist(read_innen_humidity(),read_innen_temperature()) && calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()) > calculateAbsoluteHumidity(read_aussen_temperature(), read_aussen_humidity()))
 	{
+		set_infotext("air_too_moist() && F_abs_innen > F_abs_aussen");
 		set_state_lueften();
 		return ;
 	}
 	else if (is_first_round() == false && is_hydrating_const())
 	{
+		set_infotext("is_hydrating_const() == true");
 		set_state_RF_const();
 		return ;
 	}
@@ -144,6 +147,7 @@ void state_dehydrating()
 	open_damper();
 	if (timestamp_now_s() - timestamp_dehydrating > time_dehydrating)
 	{
+		set_infotext("Zeit ist um");
 		set_state_heizen();
 	}
 	set_time_LCD(time_dehydrating - (timestamp_now_s() - timestamp_dehydrating));	
@@ -157,9 +161,11 @@ void state_heating()
 	{
 		timestamp_heating = timestamp_now_s();
 		temp_start_heating = read_innen_temperature();
+		set_infotext("restart timer Heizen");
 	}
 	if (timestamp_now_s() - timestamp_heating > time_heating)
 	{
+		set_infotext("Zeit ist um");
 		set_state_auto();
 	}
 	set_time_LCD(time_heating - (timestamp_now_s() - timestamp_heating));
@@ -175,14 +181,20 @@ void state_RF_const()
 	if (is_hydrating_const())
 	{
 		if (read_innen_temperature() > read_temp(0) + 5)
+		{
+			set_infotext("read_innen_temperature() > read_temp(0) + 5");
 			set_state_lueften();
+		}
 		else if ((timestamp_now_s() - timestamp_state_RF_const) % (30 * 60) > 29 * 60) //Zeit läuft in einem 30-Minuten-Zyklus. Sobald der Zyklusrest 1740 Sekunden oder mehr ist → Lüfter an
 			fan_on();
 		else
 			fan_off();
 	}
 	else
+	{
+		set_infotext("is_hydrating_const() == false");
 		set_state_auto();
+	}
 	set_time_LCD(timestamp_now_s() - timestamp_state_RF_const);
 }
 
@@ -198,8 +210,9 @@ void state_night()
 			fan_on();
 		else
 			fan_off();
-	if (is_day() == true)
+	if (is_day() == true && calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()) > calculateAbsoluteHumidity(read_aussen_temperature(), read_aussen_humidity()))
 	{
+		set_infotext("is_day() == true && F_abs_innen > F_abs_aussen");
 		set_state_auto();
 		return ;
 	}
