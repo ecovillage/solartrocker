@@ -30,7 +30,8 @@ MenuItem menuItems[] = {
 	{"Reset max Temp", reset_max_temp},
 	{"Lueften", set_state_lueften},
 	{"Heizen", set_state_heizen},
-	{"create new File", create_new_file}
+	{"create new File", create_new_file},
+	{"reset Summe Wasser", reset_summe_wasser}
 };
 
 const int menuItemCount = sizeof(menuItems) / sizeof(menuItems[0]);

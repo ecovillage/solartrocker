@@ -16,7 +16,7 @@ const int		time_dehydrating = 2 * 60; // Sekunden, 2 = Erkenntnis wann Feuchte_a
 unsigned long	timestamp_dehydrating = 0;
 const int		time_heating = 5 * 60; // Sekunden
 unsigned long	timestamp_heating = 0;
-const float		min_change_hydr = 2;
+const float		min_change_hydr = 3;
 float			temp_start_heating;
 unsigned long	timestamp_auto = 0;
 unsigned long	timestamp_state_RF_const = 0;
@@ -24,11 +24,30 @@ unsigned long	timestamp_manuel = 0;
 unsigned long	timestamp_night = 0;
 int 			state = 0;
 int				last_state = 0;
+float			f_a_innen_close_damper = 0;
+
+
+void setup_damper_logic()
+{
+}
+
+void set_f_a_innen_close_damper()
+{
+	f_a_innen_close_damper = calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity());
+}
+
+void add_to_summe_wasser()
+{
+	if (f_a_innen_close_damper != 0)
+		set_summe_wasser((calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()) - f_a_innen_close_damper) * (11 - 4)); //multipliziert mit dem Luftvolumen = Gesamtvolumen - Volumen_Holz
+	f_a_innen_close_damper = 0;
+}
 
 void set_state(int nb)
 {
 	last_state = state;
 	state = nb;
+	send_data_UART();
 }
 
 void set_state_manuel()

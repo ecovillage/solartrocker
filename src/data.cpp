@@ -125,7 +125,6 @@ void collect_data()
 		ring_buffer[F_abs_innen][max_values - 1] = calculateAbsoluteHumidity(ring_buffer[T_innen][max_values - 1], ring_buffer[F_innen][max_values - 1]);
 		ring_buffer[Helligkeit][max_values - 1] = read_LDR();
 		send_data_UART();
-		clear_infotext();
 		timestamp_last_save = timestamp_now_s();
 	}
 }
@@ -184,6 +183,7 @@ void send_data_UART()
 		count = 0;
 		create_new_file();
 	}
+	clear_infotext();
 }
 
 // Berechnet die neue relative Feuchte nach Temperaturänderung

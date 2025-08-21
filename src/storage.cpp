@@ -16,47 +16,67 @@
 #include "lcd.h"
 #include "bme280.h"
 
-int modus_adress = 0;
-int max_temp_adress = modus_adress + sizeof(int);
-int zyklus_adress = max_temp_adress + sizeof(int);
+int		modus_adress = 0;
+int		max_temp_adress = modus_adress + sizeof(modus_adress);
+int		zyklus_adress = max_temp_adress + sizeof(int);
+float	summe_wasser_adress = zyklus_adress + sizeof(int);
 
 // Funktion zum Speichern eines Wertes im EEPROM
-void storeValueInEEPROM(int address, int value)
+void storeIntInEEPROM(int address, int value)
 {
 	EEPROM.put(address, value);  // Speichert den Wert im EEPROM an der angegebenen Adresse
 }
 
-void updateValueInEEPROM(int address, int value)
+void updateIntInEEPROM(int address, int value)
 {
 	EEPROM.update(address, value);  // Speichert den Wert im EEPROM an der angegebenen Adresse
 }
 
 // Funktion zum Lesen des Wertes aus dem EEPROM
-int readValueFromEEPROM(int address)
+int readIntFromEEPROM(int address)
 {
 	int value;
 	EEPROM.get(address, value);  // Liest den Wert aus dem EEPROM an der angegebenen Adresse
 	return (value);
 }
 
+void storeFloatInEEPROM(int address, float value)
+{
+    EEPROM.put(address, value);  // Speichert den float-Wert im EEPROM
+}
+
+// Funktion zum Aktualisieren eines float-Wertes im EEPROM
+void updateFloatInEEPROM(int address, float value)
+{
+    EEPROM.update(address, value);  // Aktualisiert den float-Wert im EEPROM
+}
+
+// Funktion zum Lesen eines float-Wertes aus dem EEPROM
+float readFloatFromEEPROM(int address)
+{
+    float value;
+    EEPROM.get(address, value);  // Liest den float-Wert aus dem EEPROM
+    return value;
+}
+
 void set_modus(int nb)
 {
-	storeValueInEEPROM(modus_adress, nb);
+	storeIntInEEPROM(modus_adress, nb);
 }
 
 int read_modus()
 {
-	return (readValueFromEEPROM(modus_adress));
+	return (readIntFromEEPROM(modus_adress));
 }
 
 int read_max_temp_EEPROM()
 {
-	return (readValueFromEEPROM(max_temp_adress));
+	return (readIntFromEEPROM(max_temp_adress));
 }
 
 void set_max_temp_EEPROM(int nb)
 {
-	storeValueInEEPROM(max_temp_adress, nb);
+	storeIntInEEPROM(max_temp_adress, nb);
 }
 
 void save_max_temp()
@@ -99,15 +119,41 @@ void print_max_temp()
 
 void increase_zyklus()
 {
-	storeValueInEEPROM(zyklus_adress, readValueFromEEPROM(zyklus_adress) + 1);
+	storeIntInEEPROM(zyklus_adress, readIntFromEEPROM(zyklus_adress) + 1);
 }
 
 int get_zyklus()
 {
-	return (readValueFromEEPROM(zyklus_adress));
+	return (readIntFromEEPROM(zyklus_adress));
 }
 
 void set_zyklus(int nb)
 {
-	storeValueInEEPROM(zyklus_adress, nb);
+	storeFloatInEEPROM(zyklus_adress, nb);
 }
+
+float get_summe_wasser()
+{
+	return (readFloatFromEEPROM(summe_wasser_adress));
+}
+
+void set_summe_wasser(float nb)
+{
+	storeFloatInEEPROM(summe_wasser_adress, nb);
+}
+
+void reset_summe_wasser()
+{
+	storeFloatInEEPROM(summe_wasser_adress, 0);
+}
+
+void print_summe_wasser()
+{
+	print_str_lcd("Sum_Wasser: ");
+	print_float_lcd(get_summe_wasser());
+	print_str_lcd(" g");
+
+}
+
+
+
