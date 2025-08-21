@@ -26,6 +26,7 @@ void setup()
 	lcd_setup();
 	buttons_setup();
 	data_setup();
+	setup_damper_logic();
 	set_state_auto();
 	collect_data();
 }

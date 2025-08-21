@@ -13,6 +13,7 @@
 #include "Arduino.h"
 #include "damper.h"
 #include "lcd.h"
+#include "damper_logic.h"
 
 int pin_Motor = 7; // Beispiel für Pin 13, ändere dies entsprechend deinem Setup
 int state_damper;
@@ -27,6 +28,7 @@ void open_damper()
 {
 	digitalWrite(pin_Motor, HIGH);
 	state_damper = 1;
+	add_to_summe_wasser();
 }
 
 
@@ -34,6 +36,7 @@ void close_damper()
 {
 	digitalWrite(pin_Motor, LOW);
 	state_damper = 0;
+	set_f_a_innen_close_damper();
 }
 
 int get_damper_state()
