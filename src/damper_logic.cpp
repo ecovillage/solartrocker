@@ -199,9 +199,9 @@ void state_RF_const()
 {
 	if (is_hydrating_const())
 	{
-		if (read_innen_temperature() > read_temp(0) + 5)
+		if (calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()) > calculateAbsoluteHumidity(read_aussen_temperature(), read_aussen_humidity()))
 		{
-			set_infotext("read_innen_temperature() > read_temp(0) + 5");
+			set_infotext("F_abs_innen > F_abs_aussen");
 			set_state_lueften();
 		}
 		else if ((timestamp_now_s() - timestamp_state_RF_const) % (30 * 60) > 29 * 60) //Zeit läuft in einem 30-Minuten-Zyklus. Sobald der Zyklusrest 1740 Sekunden oder mehr ist → Lüfter an

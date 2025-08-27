@@ -177,6 +177,8 @@ void send_data_UART()
 	count += Serial1.print(';');
 	count += Serial1.print(get_infotext());
 	count += Serial1.print(';');
+	count += printFloat_1digit(calculateAbsoluteHumidity(read_aussen_temperature(), read_aussen_humidity()));
+	count += Serial1.print(';');
 	count += Serial1.print('\n');
 	if (count > 10000) //15000??
 	{

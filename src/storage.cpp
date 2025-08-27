@@ -17,9 +17,10 @@
 #include "bme280.h"
 
 int		modus_adress = 0;
-int		max_temp_adress = modus_adress + sizeof(modus_adress);
+int		max_temp_adress = modus_adress + sizeof(int);
 int		zyklus_adress = max_temp_adress + sizeof(int);
-float	summe_wasser_adress = zyklus_adress + sizeof(int);
+int		summe_wasser_adress = zyklus_adress + sizeof(int);
+int		next = summe_wasser_adress + sizeof(float);
 
 // Funktion zum Speichern eines Wertes im EEPROM
 void storeIntInEEPROM(int address, int value)
