@@ -46,6 +46,7 @@ void set_selectedItem(int nb)
 void change_luefter()
 {
 	set_state_manuel();
+	set_modus_display(Display_Menue);
 	if (get_fan_state() == 0)
 		fan_on();
 	else
@@ -55,6 +56,7 @@ void change_luefter()
 void change_klappen()
 {
 	set_state_manuel();
+	set_modus_display(Display_Menue);
 	if (get_damper_state() == 0)
 		open_damper();
 	else

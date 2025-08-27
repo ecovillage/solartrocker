@@ -109,8 +109,12 @@ void show_values_2()
     print_float_lcd(read_holz_humidity());
     print_str_lcd(" %rF\n");
 	
-	print_str_lcd("F(abs):     "); 
+	print_str_lcd("F(abs_i):   "); 
     print_float_lcd(calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()));
+    print_str_lcd(" g/m3\n");
+
+	print_str_lcd("F(abs_a):   "); 
+    print_float_lcd(calculateAbsoluteHumidity(read_aussen_temperature(), read_aussen_humidity()));
     print_str_lcd(" g/m3\n");
 
 	display_on_lcd();
