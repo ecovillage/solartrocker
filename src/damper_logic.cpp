@@ -12,7 +12,7 @@
 #include "menue.h"
 #include "sht3x.h"
 
-const int		time_dehydrating = 2 * 60; // Sekunden, 2 = Erkenntnis wann Feuchte_abs_innen = Feuchte_abs_aussen
+const int		time_dehydrating = 1 * 60; // Sekunden, 2 = Erkenntnis wann Feuchte_abs_innen = Feuchte_abs_aussen
 unsigned long	timestamp_dehydrating = 0;
 const int		time_heating = 5 * 60; // Sekunden
 unsigned long	timestamp_heating = 0;
@@ -29,6 +29,7 @@ float			f_a_innen_close_damper = 0;
 
 void setup_damper_logic()
 {
+	set_f_a_innen_close_damper();
 }
 
 void set_f_a_innen_close_damper()
@@ -36,10 +37,15 @@ void set_f_a_innen_close_damper()
 	f_a_innen_close_damper = calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity());
 }
 
+float get_f_a_innen_close_damper()
+{
+	return (f_a_innen_close_damper);
+}
+
 void add_to_summe_wasser()
 {
 	if (f_a_innen_close_damper != 0)
-		set_summe_wasser((calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()) - f_a_innen_close_damper) * (11 - 4)); //multipliziert mit dem Luftvolumen = Gesamtvolumen - Volumen_Holz
+		set_summe_wasser(get_summe_wasser() + (calculateAbsoluteHumidity(read_innen_temperature(), read_innen_humidity()) - f_a_innen_close_damper) * (11 - 4)); //multipliziert mit dem Luftvolumen = Gesamtvolumen - Volumen_Holz
 	f_a_innen_close_damper = 0;
 }
 

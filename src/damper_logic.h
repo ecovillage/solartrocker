@@ -13,6 +13,7 @@ enum stateIndex {
 
 void setup_damper_logic();
 void set_f_a_innen_close_damper();
+float get_f_a_innen_close_damper();
 void add_to_summe_wasser();
 bool air_too_moist(float air_humidity_inside, float air_temperature_inside);
 void state_auto();

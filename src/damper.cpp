@@ -26,17 +26,23 @@ void damper_setup()
 
 void open_damper()
 {
-	digitalWrite(pin_Motor, HIGH);
-	state_damper = 1;
-	add_to_summe_wasser();
+	if (state_damper == 0)
+	{
+		digitalWrite(pin_Motor, HIGH);
+		state_damper = 1;
+		add_to_summe_wasser();
+	}
 }
 
 
 void close_damper()
 {
-	digitalWrite(pin_Motor, LOW);
-	state_damper = 0;
-	set_f_a_innen_close_damper();
+	if (state_damper == 1)
+	{
+		digitalWrite(pin_Motor, LOW);
+		state_damper = 0;
+		set_f_a_innen_close_damper();
+	}
 }
 
 int get_damper_state()

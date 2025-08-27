@@ -15,6 +15,7 @@
 #include "storage.h"
 #include "lcd.h"
 #include "bme280.h"
+#include "damper_logic.h"
 
 int		modus_adress = 0;
 int		max_temp_adress = modus_adress + sizeof(int);
@@ -145,13 +146,16 @@ void set_summe_wasser(float nb)
 
 void reset_summe_wasser()
 {
-	storeFloatInEEPROM(summe_wasser_adress, 0);
+	set_summe_wasser(0);
 }
 
 void print_summe_wasser()
 {
 	print_str_lcd("Sum_Wasser: ");
 	print_float_lcd(get_summe_wasser());
+	print_str_lcd(" g\n");
+	print_str_lcd("D_zu_Wasser: ");
+	print_float_lcd(get_f_a_innen_close_damper());
 	print_str_lcd(" g");
 
 }
